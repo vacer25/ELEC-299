@@ -2,12 +2,14 @@
 
 #define L_MOTOR_DIR_PIN       4
 #define L_MOTOR_SPD_PIN       5
-
 #define R_MOTOR_SPD_PIN       6
 #define R_MOTOR_DIR_PIN       7
 
-#define R_BUMPER_PIN          10
-#define L_BUMPER_PIN          9
+#define ARM_UD_SERVO_PIN      9
+#define ARM_LR_SERVO_PIN      10
+#define ARM_GRIP_SERVO_PIN    11
+
+#define IR_SENSOR_PIN         8
 
 #define DISTANCE_SENSOR_PIN   A0
 
@@ -18,10 +20,10 @@
 // --------------------- CONSTANT DATA ---------------------
 
 #define DRIVE_SPEED       255
-#define SLOW_DRIVE_SPEED  128
-#define TURN_SPEED        255
+#define SLOW_DRIVE_SPEED  128 // Need to TEST
+#define TURN_SPEED        255 // Need to TEST
 
-#define _90_DEGREE_TURN_TIME 1000
+#define _90_DEGREE_TURN_TIME 1000 // Need to TEST
 
 #define RIGHT 1
 #define LEFT  0
@@ -31,6 +33,8 @@
 
 #define SLOW_DOWN_DISTANCE_READING  530
 #define STOPPING_DISTANCE_READING   660
+
+#define LINE_SENSOR_THRESHOLD 900
 
 // --------------------- STATE DATA ---------------------
 
