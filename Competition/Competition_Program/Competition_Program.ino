@@ -102,15 +102,24 @@ void loop() {
   updateFilteredDistance(analogRead(DISTANCE_SENSOR_PIN));
 
   if (state == 0) { // Find Ball
+  // Assumes the the robot is facing forward (ball location 1), 
+  // the robot arm is lowered in the forward direction  
 
+  
 
-  } else if (state == 1) { // Collec Ball
+  } else if (state == 1) { // Collect Ball
+  // Assumes that the robot has found the ball with the ball location indicated by the ballLoc variable,
+  // the robot arm is lowered in the forward direction  
 
+  
 
   }
   else if (state == 2) { // Deposit Ball
+  // Assumes that the robot has the ball in the gripper and is at the ball location indicated by the ballLoc variable,
+  // the robot arm is raised in the forward direction
 
-
+  
+  
   }
 
 }
