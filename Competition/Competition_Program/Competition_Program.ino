@@ -17,16 +17,20 @@
 
 // --------------------- CONSTANT DATA ---------------------
 
-#define DRIVE_SPEED 255
-#define TURN_SPEED  255
+#define DRIVE_SPEED       255
+#define SLOW_DRIVE_SPEED  128
+#define TURN_SPEED        255
 
 #define _90_DEGREE_TURN_TIME 1000
 
 #define RIGHT 1
-#define LEFT 0
+#define LEFT  0
 
-#define FORWARDS 1
+#define FORWARDS  1
 #define BACKWARDS 0
+
+#define SLOW_DOWN_DISTANCE_READING  530
+#define STOPPING_DISTANCE_READING   660
 
 // --------------------- STATE DATA ---------------------
 
@@ -89,12 +93,13 @@ void setup() {
 
   // ----------------------SMOOTHING-----------------------
 
-  for (int thisReading = 0; thisReading < numReadings; thisReading++) {
-    readings[thisReading] = 0;
-  }
+  setFilteredDistance(analogRead(DISTANCE_SENSOR_PIN));
 
 }
+
 void loop() {
+
+  updateFilteredDistance(analogRead(DISTANCE_SENSOR_PIN));
 
   if (state == 0) { // Find Ball
 
@@ -119,17 +124,17 @@ void stopMotors() {
 
 }
 
-void drive(boolean forwards) {
+void drive(boolean forwards, int currentSpeed) {
 
   digitalWrite(L_MOTOR_DIR_PIN, forwards ? HIGH : LOW);
   digitalWrite(R_MOTOR_DIR_PIN, forwards ? HIGH : LOW);
 
-  analogWrite(L_MOTOR_SPD_PIN, DRIVE_SPEED);
-  analogWrite(R_MOTOR_SPD_PIN, DRIVE_SPEED);
+  analogWrite(L_MOTOR_SPD_PIN, currentSpeed);
+  analogWrite(R_MOTOR_SPD_PIN, currentSpeed);
 
 }
 
-// --------------------- POVOTING ---------------------
+// --------------------- PIVOTING ---------------------
 
 // Rotates the robot by driving wheels motors in opposite directions
 // rightDir: true to pivot right, false to pivot left
