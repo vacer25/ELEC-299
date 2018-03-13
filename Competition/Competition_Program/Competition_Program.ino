@@ -1,3 +1,5 @@
+#include <Servo.h>
+
 // --------------------- PINS ---------------------
 
 #define L_MOTOR_DIR_PIN       4
@@ -18,11 +20,14 @@
 #define R_LIGHT_SENSOR_PIN    A4
 
 // --------------------- CONSTANT DATA ---------------------
-Servo LRServo;
-Servo UDServo;
-#include <Servo.h>
+
 #include "QSerial.h"
 QSerial myIRserial;
+
+#define RIGHT 1
+#define LEFT  0
+#define FORWARDS  1
+#define BACKWARDS 0
 
 #define DRIVE_SPEED       255
 #define SLOW_DRIVE_SPEED  128 // Need to TEST
@@ -35,16 +40,20 @@ QSerial myIRserial;
 
 #define DIAGONAL_TURN_ANGLE 45 // Need to TEST
 
-#define RIGHT 1
-#define LEFT  0
-
-#define FORWARDS  1
-#define BACKWARDS 0
+#define GRIP_OPEN_ANGLE 40
+#define GRIP_CLOSE_ANGLE 110 // Need to TEST
 
 #define SLOW_DOWN_DISTANCE_READING  530
 #define STOPPING_DISTANCE_READING   660
 
 #define LINE_SENSOR_THRESHOLD 900
+
+
+// --------------------- SERVO OBJECTS ---------------------
+
+Servo LRServo;
+Servo UDServo;
+Servo gripServo;
 
 // --------------------- STATE DATA ---------------------
 
@@ -100,6 +109,12 @@ void setup() {
   pinMode(L_LIGHT_SENSOR_PIN, INPUT);
   pinMode(C_LIGHT_SENSOR_PIN, INPUT);
   pinMode(R_LIGHT_SENSOR_PIN, INPUT);
+
+  // --------------------- SERVOS ---------------------
+
+  LRServo.attach(ARM_LR_SERVO_PIN);
+  UDServo.attach(ARM_UD_SERVO_PIN);
+  gripServo.attach(ARM_GRIP_SERVO_PIN);
 
   // --------------------- STOP MOTORS ---------------------
 
@@ -161,6 +176,19 @@ void loop() {
       }
     */
 
+  }
+
+}
+
+// --------------------- ARM MOVEMENT ---------------------
+
+void gripBall(boolean grip) {
+
+  if (gripBall) {
+    gripServo.write(GRIP_CLOSE_ANGLE);
+  }
+  else {
+    gripServo.write(GRIP_OPEN_ANGLE);
   }
 
 }

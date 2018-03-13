@@ -39,12 +39,26 @@ void runDepositBallLogic() {
   // Start following the middle line until all 3 light sensors are over the deposit line
   do {
     followLine()
-  } while(!isFullyOverLine());
+  } while (!isFullyOverLine());
 
-  // At this point the robot has reached the deposit code, so stop it
+  // At this point the robot has reached the deposit point, so stop it
   stopMotors();
-  
-  // TODO: make the ball drop and the robot return to center
+
+  // Drop the ball
+  gripBall(false);
+
+  // TODO: lower arm
+
+  // Turn towards the center
+  pivot(RIGHT, 180);
+
+  // Start following the middle line until all 3 light sensors are over the center line
+  do {
+    followLine()
+  } while (!isFullyOverLine());
+
+  // At this point the robot has reached the center, so stop it
+  stopMotors();
 
 }
 
