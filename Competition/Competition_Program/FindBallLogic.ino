@@ -1,4 +1,6 @@
-
+void FindBallLogic{
+//Servo LRServo;
+//Servo UDServo;
 
 //Note:U/D servo pin 9
 //Note:L/R servo pin 10
@@ -7,7 +9,9 @@
 bool ang1Result=False;
 bool ang2Result=False;
 byte loc=ANG1;
-
+int val;
+unsigned waitMillis;
+int delayMillis=410;
 void setup() {
   pinMode(IR_IN_PIN, INPUT);
   //pinMode(BUZZER_PIN, OUTPUT);
@@ -25,19 +29,31 @@ void setup() {
   */
 }
 
-void loop() {
+while(state=0){
 if (loc=ANG1){
-//Look in range of 0-15
-
+ pivotSearchArm(0,10);
+//Look in range of 0-10
 //Look in range of 99-106
-}else if 
-llLoc = myIRserial.receive(200);
-ballLoc=(char)ballLoc;
-  if (ballLoc>-1&&ballLoc<3) {
- 
+loc=ANG2;
+}
+if (loc=ANG2)
+pivotSearchArm(99,104);
+loc=ANG1;
+}
+}
+void pivotSearchArm(int start,int end){
+  for(start;start<end;start++){
+    waitMillis=millis()+delayMillis;
+    while(millis()<delayMillis){
+    LRServo.write(start);
+    IRcheck();
+    }
+    }
+}
+void IRcheck(){
+val = myIRserial.receive(200);
+  if (val>=48&&val<=50) {
+    ballLoc=(char)val;
     state=1;
   }
-}
-void pivotArm(){
-  
   }
