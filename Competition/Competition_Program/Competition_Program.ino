@@ -29,6 +29,7 @@ QSerial myIRserial;
 #define TURN_SPEED        255 // Need to TEST
 
 #define _90_DEGREE_TURN_TIME 1000 // Need to TEST
+#define SHORT_DRIVE_TO_CENTER_TIME  1000 // Need to TEST
 
 #define RIGHT 1
 #define LEFT  0

@@ -6,7 +6,7 @@ boolean isOverCenterLine() {
   int centerSensorValue = analogRead(centerSensorPin);
   int rightSensorValue = analogRead(rightSensorPin);
 
-  return leftSensorValue > LINE_SENSOR_THRESHOLD && 
+  return leftSensorValue > LINE_SENSOR_THRESHOLD && centerSensorValue > LINE_SENSOR_THRESHOLD && rightSensorValue > LINE_SENSOR_THRESHOLD;
   
 }
 
