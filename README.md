@@ -11,3 +11,13 @@ Code for ELEC 299 mechatronics course.
 7. Infrared Ranging Sensor 
 8. Infrared Communication
 9. Bluetooth Communication
+
+## Testing:
+Various helpful programs used to tune the robot.
+
+## Competition:
+The actual competition code.
+
+---
+
+Read the licence file for more info.
