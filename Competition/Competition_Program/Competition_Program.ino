@@ -121,7 +121,7 @@ void loop() {
   // Assumes that the robot has found the ball with the ball location indicated by the ballLoc variable,
   // the robot arm is lowered in the forward direction  
 
-  runCollectBallLogic();  
+  
 
   }
   else if (state == 2) { // Deposit Ball

@@ -1,36 +1,26 @@
-runCollectBallLogic() {
-  
-  if(ballLoc = 0) {
-    //pivot right 90 degreese 
-    pivot(true, 90);
-  
-    //drive forward until it reaches the ball 
-    driveForwardToBall();   
-  }
-  
-  else if (ballLoc = 1) {
-    //drive forward until it reaches the ball      
-    driveForwardToBall();      
-  }
-  
-  else if(ballLoc = 2) {
-    //pivot left 90 degreese
-    pivot(false, 90);   
-    
-    //drive forward until it reaches the ball    
-    driveForwardToBall();   
-  }
-  
-  //lowers arm to the height of the ball
-   
-  
-  //This code grabs the ball, and checks whether it has grip of it 
-  
-  //raises the arm with the ball in its grasps 
-  
-  //set state to 2 so robot can start deposit ball code. 
-  state = 2;
+
+if(ballLoc = 0) {
+  //pivot right 90 degreese 
+  pivot(true, 90);
+
+  //drive forward until it reaches the ball 
+  driveForwardToBall();   
 }
+
+else if (ballLoc = 1) {
+  //drive forward until it reaches the ball      
+  driveForwardToBall();      
+}
+
+else if(ballLoc = 2) {
+  //pivot left 90 degreese
+  pivot(false, 90);   
+  
+  //drive forward until it reaches the ball    
+  driveForwardToBall();   
+
+}
+
 void driveForwardToBall() {
   //drive forward initially
   drive(true, DRIVE_SPEED);
