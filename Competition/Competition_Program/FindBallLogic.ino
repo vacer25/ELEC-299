@@ -1,10 +1,12 @@
-#include "QSerial.h"
-QSerial myIRserial;
 
-#define BUZZER_PIN 11
-#define IR_IN_PIN 10
 
-int val;
+//Note:U/D servo pin 9
+//Note:L/R servo pin 10
+#define byte ANG1=0;
+#define byte ANG2=1;
+bool ang1Result=False;
+bool ang2Result=False;
+byte loc=ANG1;
 
 void setup() {
   pinMode(IR_IN_PIN, INPUT);
@@ -24,24 +26,18 @@ void setup() {
 }
 
 void loop() {
+if (loc=ANG1){
+//Look in range of 0-15
 
-  val = myIRserial.receive(200);
-  /*
-    if (val == 1) {
-    tone(BUZZER_PIN, 200, 50);
-    }
-    else if (val == 2) {
-    tone(BUZZER_PIN, 700, 50);
-    }
-    else if (val == 3) {
-    tone(BUZZER_PIN, 1500, 50);
-    }
-    else if (val > 3) {
-    tone(BUZZER_PIN, 2500, 200);
-    }
-  */
-  if (val != 0) {
-    Serial.println((char)val);
+//Look in range of 99-106
+}else if 
+llLoc = myIRserial.receive(200);
+ballLoc=(char)ballLoc;
+  if (ballLoc>-1&&ballLoc<3) {
+ 
+    state=1;
   }
-  //delay(100);
 }
+void pivotArm(){
+  
+  }

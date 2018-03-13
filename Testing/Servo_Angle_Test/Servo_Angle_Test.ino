@@ -21,9 +21,15 @@ void setup() {
 
 void loop() {
   val = analogRead(potpin);            // reads the value of the potentiometer (value between 0 and 1023)
-  val = map(val, 0, 1023, 0, 180);     // scale it to use it with the servo (value between 0 and 180)
+  val = map(val, 0, 1023, 0, 220);     // scale it to use it with the servo (value between 0 and 180)
+//  int i=0;
+//  while(i<180){
+//  myservo.write(i);
+//  Serial.println(i);
+//  delay(1000);        // waits for the servo to get there
+//  i+=20;
+//  }    
   myservo.write(val);                  // sets the servo position according to the scaled value
-  Serial.println(val);
-  delay(15);                           // waits for the servo to get there
+  Serial.println(val);               
 }
 
