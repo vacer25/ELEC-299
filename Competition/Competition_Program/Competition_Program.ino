@@ -18,6 +18,11 @@
 #define R_LIGHT_SENSOR_PIN    A4
 
 // --------------------- CONSTANT DATA ---------------------
+Servo LRServo;
+Servo UDServo;
+#include <Servo.h>
+#include "QSerial.h"
+QSerial myIRserial;
 
 #define DRIVE_SPEED       255
 #define SLOW_DRIVE_SPEED  128 // Need to TEST
