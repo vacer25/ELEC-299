@@ -33,8 +33,12 @@ QSerial myIRserial;
 #define SLOW_DRIVE_SPEED  128 // Need to TEST
 #define TURN_SPEED        255 // Need to TEST
 
-#define _90_DEGREE_TURN_TIME 1000 // Need to TEST
-#define SHORT_DRIVE_TO_CENTER_TIME  1000 // Need to TEST
+#define _90_DEGREE_TURN_TIME              1000 // Need to TEST
+#define SHORT_DRIVE_TO_CENTER_TIME        1000 // Need to TEST
+#define DRIVE_TO_HALF_CENTER_TIME         1000 // Need to TEST
+#define DRIVE_IGNORING_LINE_FOLLOW_TIME   1000 // Need to TEST
+
+#define DIAGONAL_TURN_ANGLE 45 // Need to TEST
 
 #define GRIP_OPEN_ANGLE 40
 #define GRIP_CLOSE_ANGLE 110 // Need to TEST
@@ -126,25 +130,52 @@ void loop() {
 
   updateFilteredDistance(analogRead(DISTANCE_SENSOR_PIN));
 
+  // ---------------------- FIND BALL-----------------------
+
   if (state == 0) { // Find Ball
-  // Assumes the the robot is facing forward (ball location 1), 
-  // the robot arm is lowered in the forward direction  
+    // Assumes the the robot is facing forward (ball location 1),
+    // the robot arm is lowered in the forward direction
 
-  
 
-  } else if (state == 1) { // Collect Ball
-  // Assumes that the robot has found the ball with the ball location indicated by the ballLoc variable,
-  // the robot arm is lowered in the forward direction  
-
-  runCollectBallLogic();  
 
   }
-  else if (state == 2) { // Deposit Ball
-  // Assumes that the robot has the ball in the gripper and is at the ball location indicated by the ballLoc variable,
-  // the robot arm is raised in the forward direction
 
-  
-  
+  // ---------------------- COLLECT BALL-----------------------
+
+  else if (state == 1) { // Collect Ball
+    // Assumes that the robot has found the ball with the ball location indicated by the ballLoc variable,
+    // the robot arm is lowered in the forward direction
+
+
+
+  }
+
+  // ---------------------- DEPOSIT BALL-----------------------
+
+  else if (state == 2) { // Deposit Ball
+    // Assumes that the robot has the ball in the gripper and is at the ball location indicated by the ballLoc variable,
+    // the robot arm is raised in the forward direction
+
+    // New version
+    runDepositBallLogic();
+
+    /*
+      // Old, unfinished implementation
+      // Drive backwards from the ball collect location
+      goToCenter();
+
+      // Turn the robot towards the deposit point
+      if (ballLoc == 0) { // Ball was on the right of the deposit point
+      pivot(RIGHT, 90);
+      }
+      else if (ballLoc == 1) { // Ball was on the ahead of the deposit point
+      pivot(RIGHT, 180);
+      }
+      else if (ballLoc == 2) { // Ball was on the left of the deposit point
+      pivot(LEFT, 90);
+      }
+    */
+
   }
 
 }
@@ -181,9 +212,63 @@ void drive(boolean forwards, int currentSpeed) {
 
 }
 
+// --------------------- LINE FOLLOWING ---------------------
+
+void followLine() {
+
+  // Get the sensor readings
+  int leftSensorValue = analogRead(leftSensorPin);
+  int centerSensorValue = analogRead(centerSensorPin);
+  int rightSensorValue = analogRead(rightSensorPin);
+
+  // If only the middle sensor is over the line, drive forward
+  if (centerSensorValue >= LINE_SENSOR_THRESHOLD && leftSensorValue < LINE_SENSOR_THRESHOLD && rightSensorValue < LINE_SENSOR_THRESHOLD) { //forward
+    drive(FORWARDS, DRIVE_SPEED);
+    DebugPrintln.println("F");
+  }
+
+  // If the right sensor is over the line, turn right
+  else if (leftSensorValue < LINE_SENSOR_THRESHOLD && rightSensorValue >= LINE_SENSOR_THRESHOLD) {
+    turn(RIGHT);
+    DebugPrintln.println("R");
+  }
+
+  // If the left sensor is over the line, turn left
+  else if (leftSensorValue >= LINE_SENSOR_THRESHOLD && rightSensorValue < LINE_SENSOR_THRESHOLD) {
+    turn(LEFT);
+    DebugPrintln.println("L");
+  }
+
+}
+
+// --------------------- TURNING ---------------------
+
+// Turn by stopping 1 motor
+// rightDir: true to pivot right, false to pivot left
+void turn(boolean rightDir) {
+
+  // Set the motors to go forward
+  digitalWrite(L_MOTOR_DIR_PIN, HIGH);
+  digitalWrite(R_MOTOR_DIR_PIN, HIGH);
+
+  // If turning right, turn the left motor on and right motor off
+  if (rightDir) {
+    analogWrite(R_MOTOR_SPD_PIN, 0);
+    analogWrite(L_MOTOR_SPD_PIN, SPEED);
+  }
+
+  // If turning left, turn the left motor off and right motor on
+  else {
+    analogWrite(R_MOTOR_SPD_PIN, SPEED);
+    analogWrite(L_MOTOR_SPD_PIN, 0);
+  }
+
+}
+
 // --------------------- PIVOTING ---------------------
 
 // Rotates the robot by driving wheels motors in opposite directions
+// Stops at the end of the pivot
 // rightDir: true to pivot right, false to pivot left
 // angle: angle to pivot by, in degrees
 void pivot(boolean rightDir, float angle) {
@@ -201,19 +286,19 @@ void pivot(boolean rightDir, float angle) {
   DebugPrintln(" degrees");
 
   // Set the left and right motor directions depending on pivot direction
-  digitalWrite(LDIR, rightDir ? HIGH : LOW);
-  digitalWrite(RDIR, rightDir ? LOW : HIGH);
+  digitalWrite(L_MOTOR_DIR_PIN, rightDir ? HIGH : LOW);
+  digitalWrite(R_MOTOR_DIR_PIN, rightDir ? LOW : HIGH);
 
   // Start the motors
-  analogWrite(LSPD, TURN_SPEED);
-  analogWrite(RSPD, TURN_SPEED);
+  analogWrite(L_MOTOR_SPD_PIN, TURN_SPEED);
+  analogWrite(R_MOTOR_SPD_PIN, TURN_SPEED);
 
   // Delay for the needed amount of time (relative to 90° turn time)
   delay(_90_DEGREE_TURN_TIME * (angle / 90.0));
 
   // Stop the motors
-  analogWrite(LSPD, 0);
-  analogWrite(RSPD, 0);
+  analogWrite(L_MOTOR_SPD_PIN, 0);
+  analogWrite(R_MOTOR_SPD_PIN, 0);
 
 }
 
