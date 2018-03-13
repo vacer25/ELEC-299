@@ -50,6 +50,12 @@
 #define DRIVE_TO_HALF_CENTER_TIME         500 // Need to TEST
 #define DRIVE_IGNORING_LINE_FOLLOW_TIME   500 // Need to TEST
 
+// Arm Timings
+#define ARM_LOWER_WAIT_TIME               100 // Need to TEST
+#define ARM_RAISE_WAIT_TIME               100 // Need to TEST
+#define GRIP_OPEN_WAIT_TIME               50  // Need to TEST
+#define GRIP_CLOSE_WAIT_TIME              50  // Need to TEST
+
 // IR Sensor timings
 #define IR_SENSOR_SCAN_TIMEOUT            200 // Need to TEST
 #define IR_SENSOR_ARM_MOVE_DWEL_TIME      410 // Need to TEST
@@ -60,6 +66,8 @@
 // Arm Angles
 #define GRIP_OPEN_ANGLE                   40
 #define GRIP_CLOSE_ANGLE                  110 // Need to TEST
+#define ARM_RAISED_ANGLE                  155
+#define ARM_LOWERED_ANGLE                 91
 
 // Distances
 #define SLOW_DOWN_DISTANCE_READING        530
@@ -111,8 +119,8 @@ void setup() {
   pinMode(R_MOTOR_DIR_PIN, OUTPUT);
   pinMode(R_MOTOR_SPD_PIN, OUTPUT);
 
-  pinMode(R_BUMPER_PIN, INPUT);
-  pinMode(L_BUMPER_PIN, INPUT);
+  //pinMode(R_BUMPER_PIN, INPUT);
+  //pinMode(L_BUMPER_PIN, INPUT);
 
   pinMode(IR_SENSOR_PIN, INPUT);
   
@@ -172,6 +180,7 @@ void loop() {
 
 // --------------------- BUTTON ---------------------
 
+/*
 // Waits for the right bumper switch to be pressed and released
 // Called at end of setup() to stall program execution after initialization
 void waitForButton() {
@@ -202,3 +211,4 @@ void waitForButton() {
   // Print debugging info if debugging is globally defined
   DebugPrintln("Button waiting complete!");
 }
+*/

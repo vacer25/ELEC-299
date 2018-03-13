@@ -3,8 +3,8 @@
 boolean needToFollowLine() {
 
   // Get the sensor readings
-  int leftSensorValue = analogRead(leftSensorPin);
-  int rightSensorValue = analogRead(rightSensorPin);
+  int leftSensorValue = analogRead(L_LIGHT_SENSOR_PIN);
+  int rightSensorValue = analogRead(R_LIGHT_SENSOR_PIN);
 
   // If the ball was at location 0, the robot is approaching the middle line from the left so the right sensor will detect the line first
   if (ballLoc == 0 && rightSensorValue > LINE_SENSOR_THRESHOLD) return true;
@@ -24,9 +24,9 @@ boolean needToFollowLine() {
 boolean isFullyOverLine() {
 
   // Get the sensor readings
-  int leftSensorValue = analogRead(leftSensorPin);
-  int centerSensorValue = analogRead(centerSensorPin);
-  int rightSensorValue = analogRead(rightSensorPin);
+  int leftSensorValue = analogRead(L_LIGHT_SENSOR_PIN);
+  int centerSensorValue = analogRead(C_LIGHT_SENSOR_PIN);
+  int rightSensorValue = analogRead(R_LIGHT_SENSOR_PIN);
 
   // Return true when  all 3 light sensors reading are >= the threshold
   return leftSensorValue >= LINE_SENSOR_THRESHOLD && centerSensorValue >= LINE_SENSOR_THRESHOLD && rightSensorValue >= LINE_SENSOR_THRESHOLD;

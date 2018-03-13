@@ -12,31 +12,34 @@ void runCollectBallLogic() {
   // Drive forward until it reaches the ball
   driveForwardToBall();
 
-  // TODO: lowers arm to the height of the ball
+  // Lower arm to the height of the ball
+  lowerArm();
 
-  // TODO: grabs the ball, and checks whether it has grip of it
+  // Grabs the ball,
+  // TODO: Check whether it has grip of it
+  gripBall(true);
 
-  // TODO: raises the arm with the ball in its grasps
+  // Raise the arm with the ball in its grip
+  raiseArm();
 
-  // Set state to 2 so robot can start deposit ball code.
+  // Set state to 2 so robot can start the deposit ball code
   state = 2;
+
 }
 
 void driveForwardToBall() {
 
-  // Drive forward initially
-  drive(FORWARDS, DRIVE_SPEED);
+  // Follow the line leading to the ball until reaching slow down distance
+  while (!needToSlowDownByDistance()) {
+    followLine(DRIVE_SPEED);
+  }
 
-  // Keep driving unitil reaching slow down distance
-  while (!needToSlowDownByDistance()) { }
+  // Follow the line leading to the ball at at slower speed until reaching stopping distance
+  while (!needToStopByDistance()) {
+    followLine(SLOW_DRIVE_SPEED);
+  }
 
-  // Set the robot to srive at at slower speed
-  drive(BACKWARDS, SLOW_DRIVE_SPEED);
-
-  // Keep driving, EXCEPT SLOWER!!!!
-  while (!needToStopByDistance()) { }
-
-  // Stop the robot under the assumption its right in front of the ball.
+  // Stop the robot under the assumption its right in front of the ball
   stopMotors();
 
 }

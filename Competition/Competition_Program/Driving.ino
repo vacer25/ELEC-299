@@ -19,29 +19,29 @@ void drive(boolean forwards, int currentSpeed) {
 
 // --------------------- LINE FOLLOWING ---------------------
 
-void followLine() {
+void followLine(int currentSpeed) {
 
   // Get the sensor readings
-  int leftSensorValue = analogRead(leftSensorPin);
-  int centerSensorValue = analogRead(centerSensorPin);
-  int rightSensorValue = analogRead(rightSensorPin);
+  int leftSensorValue = analogRead(L_LIGHT_SENSOR_PIN);
+  int centerSensorValue = analogRead(C_LIGHT_SENSOR_PIN);
+  int rightSensorValue = analogRead(R_LIGHT_SENSOR_PIN);
 
   // If only the middle sensor is over the line, drive forward
   if (centerSensorValue >= LINE_SENSOR_THRESHOLD && leftSensorValue < LINE_SENSOR_THRESHOLD && rightSensorValue < LINE_SENSOR_THRESHOLD) { //forward
-    drive(FORWARDS, DRIVE_SPEED);
-    DebugPrintln.println("F");
+    drive(FORWARDS, currentSpeed);
+    DebugPrintln("F");
   }
 
   // If the right sensor is over the line, turn right
   else if (leftSensorValue < LINE_SENSOR_THRESHOLD && rightSensorValue >= LINE_SENSOR_THRESHOLD) {
-    turn(RIGHT);
-    DebugPrintln.println("R");
+    turn(RIGHT, currentSpeed);
+    DebugPrintln("R");
   }
 
   // If the left sensor is over the line, turn left
   else if (leftSensorValue >= LINE_SENSOR_THRESHOLD && rightSensorValue < LINE_SENSOR_THRESHOLD) {
-    turn(LEFT);
-    DebugPrintln.println("L");
+    turn(LEFT, currentSpeed);
+    DebugPrintln("L");
   }
 
 }
@@ -50,7 +50,7 @@ void followLine() {
 
 // Turn by stopping 1 motor
 // rightDir: true to pivot right, false to pivot left
-void turn(boolean rightDir) {
+void turn(boolean rightDir, int currentSpeed) {
 
   // Set the motors to go forward
   digitalWrite(L_MOTOR_DIR_PIN, HIGH);
@@ -59,12 +59,12 @@ void turn(boolean rightDir) {
   // If turning right, turn the left motor on and right motor off
   if (rightDir) {
     analogWrite(R_MOTOR_SPD_PIN, 0);
-    analogWrite(L_MOTOR_SPD_PIN, SPEED);
+    analogWrite(L_MOTOR_SPD_PIN, currentSpeed);
   }
 
   // If turning left, turn the left motor off and right motor on
   else {
-    analogWrite(R_MOTOR_SPD_PIN, SPEED);
+    analogWrite(R_MOTOR_SPD_PIN, currentSpeed);
     analogWrite(L_MOTOR_SPD_PIN, 0);
   }
 

@@ -41,7 +41,7 @@ void pivotSearchArm(int start, int end) {
 
 void checkIRSignal() {
 
-  currentIRValue = myIRserial.receive(IR_SENSOR_SCAN_TIMEOUT);
+  currentIRValue = IRSerial.receive(IR_SENSOR_SCAN_TIMEOUT);
 
   if (currentIRValue >= 48 && currentIRValue <= 50) {
     ballLoc = currentIRValue - 48;

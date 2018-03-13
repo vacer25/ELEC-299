@@ -38,7 +38,7 @@ void runDepositBallLogic() {
 
   // Start following the middle line until all 3 light sensors are over the deposit line
   do {
-    followLine()
+    followLine(DRIVE_SPEED);
   } while (!isFullyOverLine());
 
   // At this point the robot has reached the deposit point, so stop it
@@ -47,14 +47,15 @@ void runDepositBallLogic() {
   // Drop the ball
   gripBall(false);
 
-  // TODO: lower arm
-
   // Turn towards the center
   pivot(RIGHT, 180);
 
+  // Lower the arm so that the IR scanning works when the robot returns to center
+  lowerArm();
+
   // Start following the middle line until all 3 light sensors are over the center line
   do {
-    followLine()
+    followLine(DRIVE_SPEED);
   } while (!isFullyOverLine());
 
   // At this point the robot has reached the center, so stop it
