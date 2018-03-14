@@ -19,12 +19,12 @@ void runFindBallLogic() {
 
 }
 
-void pivotSearchArm(int start, int end) {
+void pivotSearchArm(int startPos, int endPos) {
 
   unsigned long currentMillis = millis();
   unsigned long waitMillis;
 
-  for (int currentLoc = start; currentLoc < end; currentLoc++) {
+  for (int currentLoc = startPos; currentLoc < endPos; currentLoc++) {
 
     LRServo.write(currentLoc);
 
