@@ -13,14 +13,14 @@ void runCollectBallLogic() {
   driveForwardToBall();
 
   // Lower arm to the height of the ball
-  lowerArm();
+  tiltArm(ARM_LOWERED_TILT);
 
   // Grabs the ball,
   // TODO: Check whether it has grip of it
   gripBall(true);
 
   // Raise the arm with the ball in its grip
-  raiseArm();
+  tiltArm(ARM_RAISED_TILT);
 
   // Set state to 2 so robot can start the deposit ball code
   state = 2;

@@ -51,7 +51,7 @@ void runDepositBallLogic() {
   pivot(RIGHT, 180);
 
   // Lower the arm so that the IR scanning works when the robot returns to center
-  lowerArm();
+  tiltArm(ARM_LOWERED_TILT);
 
   // Start following the middle line until all 3 light sensors are over the center line
   do {

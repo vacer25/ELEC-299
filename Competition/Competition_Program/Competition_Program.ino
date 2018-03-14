@@ -36,8 +36,12 @@
 #define BACKWARDS 0
 
 // Arm positions
-#define ARM_POS_1 0
-#define ARM_POS_2 1
+#define ARM_LEFT_PAN 0
+#define ARM_CENTER_PAN 1
+
+#define ARM_RAISED_TILT                  0
+#define ARM_IR_SENSE_TILT                1
+#define ARM_LOWERED_TILT                 2
 
 // Speeds
 #define DRIVE_SPEED                       255
@@ -51,8 +55,9 @@
 #define DRIVE_IGNORING_LINE_FOLLOW_TIME   500 // Need to TEST
 
 // Arm Timings
-#define ARM_LOWER_WAIT_TIME               100 // Need to TEST
 #define ARM_RAISE_WAIT_TIME               100 // Need to TEST
+#define ARM_IR_SENSE_WAIT_TIME            100 // Need to TEST
+#define ARM_LOWER_WAIT_TIME               100 // Need to TEST
 #define GRIP_OPEN_WAIT_TIME               50  // Need to TEST
 #define GRIP_CLOSE_WAIT_TIME              50  // Need to TEST
 
@@ -68,6 +73,7 @@
 #define GRIP_CLOSE_ANGLE                  110 // Need to TEST
 #define ARM_RAISED_ANGLE                  155
 #define ARM_LOWERED_ANGLE                 91
+#define ARM_IR_SENSE_ANGLE                100 // Need to TEST
 
 // Distances
 #define SLOW_DOWN_DISTANCE_READING        530
