@@ -4,7 +4,6 @@ void runFindBallLogic() {
 
   if (SIMULATED_BALL_LOCATION != 0) {
     ballLoc = SIMULATED_BALL_LOCATION;
-    state = 1;
     DebugPrint("Simulated ball location was: ");  DebugPrintln(ballLoc);
   }
   else {
@@ -32,7 +31,6 @@ void runFindBallLogic() {
     // If the ball it not forward or left, it it right
     if (state == 0) {
       ballLoc = 0;
-      state = 1;
     }
 
     /*
@@ -57,6 +55,10 @@ void runFindBallLogic() {
   delay(1000);
   DebugPrintln("Raising arm...");
   tiltArm(ARM_RAISED_TILT);
+
+  delay(1000);
+  DebugPrintln("Done Find Ball Logic!");
+  state = 1;
 
 }
 

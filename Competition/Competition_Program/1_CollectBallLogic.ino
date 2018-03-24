@@ -36,6 +36,8 @@ void runCollectBallLogic() {
   // Raise the arm with the ball in its grip
   tiltArm(ARM_RAISED_TILT);
 
+  delay(1000);
+  DebugPrintln("Done Collect Ball Logic!");
   // Set state to 2 so robot can start the deposit ball code
   state = 2;
 
@@ -47,14 +49,14 @@ void driveForwardToBall() {
   while (!needToSlowDownByDistance()) {
     followLine(LINE_FOLLOW_SPEED);
   }
-  
+
   delay(1000);
   DebugPrintln("Reached the slow driving threshold, will follow line slowly...");
   // Follow the line leading to the ball at at slower speed until reaching stopping distance
   while (!needToStopByDistance()) {
     followLine(SLOW_DRIVE_SPEED);
   }
-  
+
   delay(1000);
   DebugPrintln("Reached the stop threshold, stopping motors...");
   // Stop the robot under the assumption its right in front of the ball
