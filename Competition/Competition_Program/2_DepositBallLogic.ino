@@ -38,7 +38,7 @@ void runDepositBallLogic() {
 
   // Start following the middle line until all 3 light sensors are over the deposit line
   do {
-    followLine(DRIVE_SPEED);
+    followLine(LINE_FOLLOW_SPEED);
   } while (!isFullyOverLine());
 
   // At this point the robot has reached the deposit point, so stop it
@@ -55,7 +55,7 @@ void runDepositBallLogic() {
 
   // Start following the middle line until all 3 light sensors are over the center line
   do {
-    followLine(DRIVE_SPEED);
+    followLine(LINE_FOLLOW_SPEED);
   } while (!isFullyOverLine());
 
   // At this point the robot has reached the center, so stop it

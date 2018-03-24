@@ -2,7 +2,7 @@
 
 void gripBall(boolean grip) {
 
-  if (gripBall) {
+  if (grip) {
     gripServo.write(GRIP_CLOSE_ANGLE);
     delay(GRIP_CLOSE_WAIT_TIME);
   }

@@ -38,13 +38,21 @@ boolean isFullyOverLine() {
 // Returns true when the robot is close enough to the wall to slow down to approach the ball
 boolean needToSlowDownByDistance() {
   // Update the distance filter
-  updateFilteredDistance(analogRead(DISTANCE_SENSOR_PIN));
-  return getFilteredDistance() <= SLOW_DOWN_DISTANCE_READING;
+  distanceFilter.updateFilteredDistance(analogRead(DISTANCE_SENSOR_PIN));
+
+  DebugPrint("Distance reading (slow): ");
+  DebugPrintln(distanceFilter.getFilteredDistance());
+
+  return distanceFilter.getFilteredDistance() >= SLOW_DOWN_DISTANCE_READING;
 }
 
 // Returns true when the robot is close enough to the wall to stop and grip the ball
 boolean needToStopByDistance() {
   // Update the distance filter
-  updateFilteredDistance(analogRead(DISTANCE_SENSOR_PIN));
-  return getFilteredDistance() <= STOPPING_DISTANCE_READING;
+  distanceFilter.updateFilteredDistance(analogRead(DISTANCE_SENSOR_PIN));
+
+  DebugPrint("Distance reading (stop): ");
+  DebugPrintln(distanceFilter.getFilteredDistance());
+
+  return distanceFilter.getFilteredDistance() >= STOPPING_DISTANCE_READING;
 }

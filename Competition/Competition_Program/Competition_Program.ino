@@ -2,6 +2,7 @@
 
 #include <Servo.h>
 #include "QSerial.h"
+#include "Filter.h"
 
 // --------------------- PINS ---------------------
 
@@ -30,27 +31,29 @@
 // --------------------- CONSTANT DATA ---------------------
 
 // Directions
-#define RIGHT     1
-#define LEFT      0
-#define FORWARDS  1
-#define BACKWARDS 0
+#define RIGHT                 1
+#define LEFT                  0
+#define FORWARDS              1
+#define BACKWARDS             0
 
 // Arm positions
-#define ARM_LEFT_PAN 0
-#define ARM_CENTER_PAN 1
+#define ARM_LEFT_PAN          0
+#define ARM_CENTER_PAN        1
+#define ARM_RIGHT_PAN         2
 
-#define ARM_RAISED_TILT                  0
-#define ARM_IR_SENSE_TILT                1
-#define ARM_LOWERED_TILT                 2
+#define ARM_RAISED_TILT       0
+#define ARM_IR_SENSE_TILT     1
+#define ARM_LOWERED_TILT      2
 
 // Speeds
 #define DRIVE_SPEED                       255
-#define SLOW_DRIVE_SPEED                  128 // Need to TEST
+#define LINE_FOLLOW_SPEED                 100 // Need to TEST
+#define SLOW_DRIVE_SPEED                  60  // Need to TEST
 #define TURN_SPEED                        255 // Need to TEST
 
 // Timings
-#define _90_DEGREE_TURN_TIME              1000 // Need to TEST
-#define SHORT_DRIVE_TO_CENTER_TIME        1000 // Need to TEST
+#define _90_DEGREE_TURN_TIME              200 // Need to TEST
+#define SHORT_DRIVE_TO_CENTER_TIME        1000// Need to TEST
 #define DRIVE_TO_HALF_CENTER_TIME         500 // Need to TEST
 #define DRIVE_IGNORING_LINE_FOLLOW_TIME   500 // Need to TEST
 
@@ -69,26 +72,35 @@
 #define DIAGONAL_TURN_ANGLE               45 // Need to TEST
 
 // Arm Angles
-#define GRIP_OPEN_ANGLE                   40
-#define GRIP_CLOSE_ANGLE                  110 // Need to TEST
+#define GRIP_OPEN_ANGLE                   50
+#define GRIP_CLOSE_ANGLE                  220 // Need to TEST
 #define ARM_RAISED_ANGLE                  155
 #define ARM_LOWERED_ANGLE                 91
-#define ARM_IR_SENSE_ANGLE                100 // Need to TEST
+#define ARM_IR_SENSE_ANGLE                110 // Need to TEST
 
 // Distances
-#define SLOW_DOWN_DISTANCE_READING        530
-#define STOPPING_DISTANCE_READING         660
+#define SLOW_DOWN_DISTANCE_READING        300
+#define STOPPING_DISTANCE_READING         470
 
 // Light threshold
 #define LINE_SENSOR_THRESHOLD             900
 
 // --------------------- STATE DATA ---------------------
 
-int state = 0; // 0 = Find Ball, 1 = Collect Ball, 2 = Deposit Ball
-int ballLoc = -1; // 0, 1, or 2
-int armPos = 0; // 0 = Left, 1 = Right
+// -1 = None, 0 = Right, 1 = Center, or 2 = Left
+#define SIMULATED_BALL_LOCATION 1
 
-int currentIRValue; // -1, -2 = Error / no signal, 48, 49, 50 == Valid lacc location data
+// 0 = Find Ball, 1 = Collect Ball, 2 = Deposit Ball
+int state = 0; 
+
+// 0 = Right, 1 = Center, or 2 = Left
+int ballLoc = -1; 
+
+// 0 = Left, 1 = Right
+int armPos = ARM_CENTER_PAN; 
+
+// -1, -2 = Error / no signal, 48, 49, 50 == Valid ball location data
+int currentIRValue;
 
 // --------------------- SERVO OBJECTS ---------------------
 
@@ -97,6 +109,10 @@ Servo LRServo, UDServo, gripServo;
 // --------------------- IR SERIAL OBJECT ---------------------
 
 QSerial IRSerial;
+
+//------------------------SMOOTHING-----------------------------------
+
+Filter distanceFilter;
 
 // -------------------- SERIAL / DEBUGGING --------------------
 
@@ -129,7 +145,7 @@ void setup() {
   //pinMode(L_BUMPER_PIN, INPUT);
 
   pinMode(IR_SENSOR_PIN, INPUT);
-  
+
   pinMode(DISTANCE_SENSOR_PIN, INPUT);
 
   pinMode(L_LIGHT_SENSOR_PIN, INPUT);
@@ -138,7 +154,11 @@ void setup() {
 
   // --------------------- IR SENSOR ---------------------
 
-  IRSerial.attach(IR_SENSOR_PIN, -1);    
+  IRSerial.attach(IR_SENSOR_PIN, -1);
+  
+  // ---------------------- DISTANCE SMOOTHING -----------------------
+
+  distanceFilter.setFilteredDistance((float)analogRead(DISTANCE_SENSOR_PIN));
   
   // --------------------- SERVOS ---------------------
 
@@ -150,13 +170,32 @@ void setup() {
 
   stopMotors();
 
-  // ----------------------SMOOTHING-----------------------
-
-  setFilteredDistance(analogRead(DISTANCE_SENSOR_PIN));
-
 }
 
 void loop() {
+
+  /*
+    while (1) {
+      delay(1000);
+      pivot(RIGHT, 90);
+      delay(1000);
+      pivot(LEFT, 90);
+      delay(1000);
+    }
+  */
+
+  /*
+  while (1) {
+    distanceFilter.updateFilteredDistance((float)analogRead(DISTANCE_SENSOR_PIN));
+
+    //DebugPrint("Distance reading (stop): ");
+    DebugPrint("0,1024,");
+    DebugPrint(analogRead(DISTANCE_SENSOR_PIN));
+    DebugPrint(",");
+    DebugPrintln(distanceFilter.getFilteredDistance());
+    delay(10);
+  }
+  */
 
   // ---------------------- FIND BALL -----------------------
 
@@ -187,9 +226,9 @@ void loop() {
 // --------------------- BUTTON ---------------------
 
 /*
-// Waits for the right bumper switch to be pressed and released
-// Called at end of setup() to stall program execution after initialization
-void waitForButton() {
+  // Waits for the right bumper switch to be pressed and released
+  // Called at end of setup() to stall program execution after initialization
+  void waitForButton() {
 
   // Print debugging info if debugging is globally defined
   DebugPrintln("Waiting for button...");
@@ -216,5 +255,5 @@ void waitForButton() {
 
   // Print debugging info if debugging is globally defined
   DebugPrintln("Button waiting complete!");
-}
+  }
 */

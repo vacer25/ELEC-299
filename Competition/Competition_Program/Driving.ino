@@ -27,21 +27,21 @@ void followLine(int currentSpeed) {
   int rightSensorValue = analogRead(R_LIGHT_SENSOR_PIN);
 
   // If only the middle sensor is over the line, drive forward
-  if (centerSensorValue >= LINE_SENSOR_THRESHOLD && leftSensorValue < LINE_SENSOR_THRESHOLD && rightSensorValue < LINE_SENSOR_THRESHOLD) { //forward
+  //if (centerSensorValue >= LINE_SENSOR_THRESHOLD && leftSensorValue < LINE_SENSOR_THRESHOLD && rightSensorValue < LINE_SENSOR_THRESHOLD) { //forward
     drive(FORWARDS, currentSpeed);
-    DebugPrintln("F");
-  }
+    //DebugPrintln("F");
+  //}
 
   // If the right sensor is over the line, turn right
-  else if (leftSensorValue < LINE_SENSOR_THRESHOLD && rightSensorValue >= LINE_SENSOR_THRESHOLD) {
+  if (leftSensorValue < LINE_SENSOR_THRESHOLD && rightSensorValue >= LINE_SENSOR_THRESHOLD) {
     turn(RIGHT, currentSpeed);
-    DebugPrintln("R");
+    //DebugPrintln("R");
   }
 
   // If the left sensor is over the line, turn left
   else if (leftSensorValue >= LINE_SENSOR_THRESHOLD && rightSensorValue < LINE_SENSOR_THRESHOLD) {
     turn(LEFT, currentSpeed);
-    DebugPrintln("L");
+    //DebugPrintln("L");
   }
 
 }
@@ -86,9 +86,11 @@ void pivot(boolean rightDir, float angle) {
   else {
     DebugPrint("left ");
   }
-  DebugPrint("by ");
+  DebugPrint("by: ");
   DebugPrint(angle);
-  DebugPrintln(" degrees");
+  DebugPrint(" degrees. Waiting for: ");
+  DebugPrint(_90_DEGREE_TURN_TIME * (angle / 90.0));
+  DebugPrintln(" ms");
 
   // Set the left and right motor directions depending on pivot direction
   digitalWrite(L_MOTOR_DIR_PIN, rightDir ? HIGH : LOW);
