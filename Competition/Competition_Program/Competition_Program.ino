@@ -66,14 +66,13 @@
 // Timings
 #define _90_DEGREE_TURN_TIME              750 // Need to TEST
 
-#define DRIVE_TO_HALF_CENTER_TIME         200 // Need to TEST
 #define DRIVE_TO_CENTER_ADJUST_TIME       200 // Need to TEST
 #define BACKUP_FROM_DEPOSIT_TIME          200 // Need to TEST
 #define BACKUP_FROM_WALL_TIME             350 // Need to TEST
 #define _90_TURN_IGNORE_LINE_FOLLOW_TIME  400 // Need to TEST
 #define _180_TURN_IGNORE_LINE_FOLLOW_TIME 300 // Need to TEST
 #define SIDE_IGNORE_LINE_FOLLOW_TIME      200 // Need to TEST
-#define CENTER_IGNORE_LINE_FOLLOW_TIME    500 // Need to TEST
+#define CENTER_IGNORE_DROP_BALL_TIME      100 // Need to TEST
 
 // Arm Timings
 #define ARM_RAISE_WAIT_TIME               400 // Need to TEST
@@ -84,7 +83,7 @@
 
 // IR Sensor timings
 #define IR_SENSOR_SCAN_TIMEOUT            200 // Need to TEST
-#define IR_SENSOR_ARM_MOVE_DWEL_TIME      410 // Need to TEST
+#define IR_SENSOR_ARM_MOVE_DWEL_TIME      200 // Need to TEST
 
 // Angles
 #define DIAGONAL_1_TURN_ANGLE             65 // Need to TEST

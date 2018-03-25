@@ -24,14 +24,14 @@ void runFindBallLogic() {
       if (scanforBall(99, 104)) {
         break;
       }
-
-      // Scan for ball on left
-      if (scanforBall(0, 5)) {
+      
+      // Scan for ball on right
+      if (scanforBall(175, 180)) {
         break;
       }
 
-      // Scan for ball on right
-      if (scanforBall(175, 180)) {
+      // Scan for ball on left
+      if (scanforBall(0, 5)) {
         break;
       }
 
@@ -70,7 +70,9 @@ void runFindBallLogic() {
 }
 
 boolean scanforBall(int startPos, int endPos) {
+  // Pivot the arm across the scanning range
   pivotArm(startPos, endPos);
+  // Return whether the ball was found
   return (ballLoc != -1);
 }
 
@@ -79,14 +81,25 @@ void pivotArm(int startPos, int endPos) {
   unsigned long currentMillis = millis();
   unsigned long waitMillis;
 
+  // Loop through all the angles in the current scan range
   for (int currentLoc = startPos; currentLoc < endPos; currentLoc++) {
 
+    // Set the current arm pivot position
     LRServo.write(currentLoc);
 
     waitMillis = currentMillis + IR_SENSOR_ARM_MOVE_DWEL_TIME;
 
+    // Wait for some time at this arm location
     while (currentMillis < waitMillis) {
+
+      // Scan the current location for an IR signal
       checkIRSignal();
+
+      // If the ball was found, stop looking for it by breaking out of the loop
+      if (ballLoc != -1) {
+        break;
+      }
+      
       currentMillis = millis();
     }
 
@@ -96,13 +109,16 @@ void pivotArm(int startPos, int endPos) {
 
 void checkIRSignal() {
 
+  // Read the IR signal
   currentIRValue = IRSerial.receive(IR_SENSOR_SCAN_TIMEOUT);
 
+  // If a valid IR signal was found
   if (currentIRValue >= 48 && currentIRValue <= 50) {
 
     DebugPrint("Detected ball, IR value = ");
     DebugPrintln(currentIRValue);
 
+    // Convert it to the numeric value
     ballLoc = currentIRValue - '0';
   }
 

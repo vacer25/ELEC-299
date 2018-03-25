@@ -3,15 +3,6 @@ void runDepositBallLogic() {
   // If the ball was not straigh ahead, need to do some turning
   if (ballLoc != 1) {
 
-    /*
-      DebugPrintln("Driving towards center...");
-      // Drive forwards towards the center point
-      drive(FORWARDS, DRIVE_SPEED);
-
-      // Delay for enough time to for the robot to get 1/2 way towards the center
-      delay(DRIVE_TO_HALF_CENTER_TIME);
-    */
-
     // Back up from the wall
     drive(BACKWARDS, SLOW_DRIVE_SPEED);
     // Wait for the robot to back up
@@ -19,7 +10,6 @@ void runDepositBallLogic() {
     // Stop the motors once backed up
     stopMotors();
 
-    //delay(1000);
     DebugPrintln("Turning towards deposit point...");
     // Turn diagonally towards the deposit point
     if (ballLoc == 0) { // Ball was on the right of the deposit point
@@ -29,10 +19,6 @@ void runDepositBallLogic() {
       pivot(LEFT, 90 + DIAGONAL_1_TURN_ANGLE);
     }
 
-    // Small delay for the robot to come to a complete stop
-    //delay(200);
-
-    //delay(1000);
     DebugPrintln("Driving towards deposit point while ignoring line following...");
     // Drive forwards towards the deposit point
     drive(FORWARDS, DRIVE_SPEED);
@@ -49,19 +35,17 @@ void runDepositBallLogic() {
   // If ball was straight ahead, need to do a 180
   else {
 
-    //delay(1000);
     DebugPrintln("Turning towards center...");
     // Turn towards the center
     pivot(RIGHT);
     while (centerIsOverLine()) {
       /* Wait for center to move off of the line */
     }
-    delay(50);
+    delay(_180_TURN_IGNORE_LINE_FOLLOW_TIME);
     while (!centerIsOverLine()) {
       /* Wait for center to move on to the line */
     }
     stopMotors();
-    //delay(1000);
 
     // If the ball was in the center location, the robot just crossed the center cross and needs to drive over it before following the line
     // Keep following the line while the robot is not over the center cross
@@ -70,7 +54,7 @@ void runDepositBallLogic() {
     } while (!isFullyOverLine());
 
     // Wait a little for the robot to drive past the center point
-    delay(100);
+    delay(CENTER_IGNORE_DROP_BALL_TIME);
 
   }
 
@@ -85,24 +69,20 @@ void runDepositBallLogic() {
     pivot(RIGHT, DIAGONAL_2_TURN_ANGLE);
   }
 
-  //delay(1000);
   DebugPrintln("Reached line, following it towards deposit point...");
   // Start following the middle line until all 3 light sensors are over the deposit line
   do {
     followLine(LINE_FOLLOW_SPEED);
   } while (!isFullyOverLine());
 
-  //delay(1000);
   DebugPrintln("Reached deposit point...");
   // At this point the robot has reached the deposit point, so stop it
   stopMotors();
 
-  //delay(1000);
   DebugPrintln("Dropping the ball...");
   // Drop the ball
   gripBall(false);
 
-  //delay(1000);
   DebugPrintln("Backing up from deposit point...");
   drive(BACKWARDS, DRIVE_SPEED);
 
@@ -112,7 +92,6 @@ void runDepositBallLogic() {
   // Stop the motors once backed up
   stopMotors();
 
-  //delay(1000);
   DebugPrintln("Turning towards center...");
   // Turn towards the center
   pivot(RIGHT);
@@ -122,7 +101,6 @@ void runDepositBallLogic() {
   }
   stopMotors();
 
-  //delay(1000);
   DebugPrintln("Lowering arm...");
   // Lower the arm so that the IR scanning works when the robot returns to center
   tiltArm(ARM_IR_SENSE_ANGLE);
