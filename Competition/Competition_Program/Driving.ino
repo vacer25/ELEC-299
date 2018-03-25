@@ -27,10 +27,10 @@ void followLine(int currentSpeed) {
   int rightSensorValue = analogRead(R_LIGHT_SENSOR_PIN);
 
   // If only the middle sensor is over the line, drive forward
-  //if (centerSensorValue >= LINE_SENSOR_THRESHOLD && leftSensorValue < LINE_SENSOR_THRESHOLD && rightSensorValue < LINE_SENSOR_THRESHOLD) { //forward
+  if (centerSensorValue >= LINE_SENSOR_THRESHOLD && leftSensorValue < LINE_SENSOR_THRESHOLD && rightSensorValue < LINE_SENSOR_THRESHOLD) { //forward
     drive(FORWARDS, currentSpeed);
     //DebugPrintln("F");
-  //}
+  }
 
   // If the right sensor is over the line, turn right
   if (leftSensorValue < LINE_SENSOR_THRESHOLD && rightSensorValue >= LINE_SENSOR_THRESHOLD) {
@@ -58,14 +58,14 @@ void turn(boolean rightDir, int currentSpeed) {
 
   // If turning right, turn the left motor on and right motor off
   if (rightDir) {
-    analogWrite(R_MOTOR_SPD_PIN, 0);
+    analogWrite(R_MOTOR_SPD_PIN, currentSpeed / 2);
     analogWrite(L_MOTOR_SPD_PIN, currentSpeed);
   }
 
   // If turning left, turn the left motor off and right motor on
   else {
     analogWrite(R_MOTOR_SPD_PIN, currentSpeed);
-    analogWrite(L_MOTOR_SPD_PIN, 0);
+    analogWrite(L_MOTOR_SPD_PIN, currentSpeed / 2);
   }
 
 }
@@ -73,11 +73,9 @@ void turn(boolean rightDir, int currentSpeed) {
 // --------------------- PIVOTING ---------------------
 
 // Rotates the robot by driving wheels motors in opposite directions
-// Stops at the end of the pivot
+// Does NOT stop at the end of the pivot
 // rightDir: true to pivot right, false to pivot left
-// angle: angle to pivot by, in degrees
-void pivot(boolean rightDir, float angle) {
-
+void pivot(boolean rightDir) {
   // Print debugging info if debugging is globally defined
   DebugPrint("Pivoting ");
   if (rightDir) {
@@ -99,6 +97,16 @@ void pivot(boolean rightDir, float angle) {
   // Start the motors
   analogWrite(L_MOTOR_SPD_PIN, TURN_SPEED);
   analogWrite(R_MOTOR_SPD_PIN, TURN_SPEED);
+
+}
+
+// Rotates the robot by driving wheels motors in opposite directions
+// DOES stop at the end of the pivot
+// rightDir: true to pivot right, false to pivot left
+// angle: angle to pivot by, in degrees
+void pivot(boolean rightDir, float angle) {
+
+  pivot(rightDir);
 
   // Delay for the needed amount of time (relative to 90° turn time)
   delay(_90_DEGREE_TURN_TIME * (angle / 90.0));

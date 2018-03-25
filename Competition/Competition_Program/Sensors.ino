@@ -33,15 +33,27 @@ boolean isFullyOverLine() {
 
 }
 
+// Return true when the center light sensors is over a line
+boolean centerIsOverLine() {
+
+  // Get the sensor readings
+  int centerSensorValue = analogRead(C_LIGHT_SENSOR_PIN);
+
+  // Return true when  all 3 light sensors reading are >= the threshold
+  return centerSensorValue >= LINE_SENSOR_THRESHOLD;
+
+}
+
 // --------------------- IR DISTANCE ---------------------
 
+/*
 // Returns true when the robot is close enough to the wall to slow down to approach the ball
 boolean needToSlowDownByDistance() {
   // Update the distance filter
   distanceFilter.updateFilteredDistance(analogRead(DISTANCE_SENSOR_PIN));
 
-  DebugPrint("Distance reading (slow): ");
-  DebugPrintln(distanceFilter.getFilteredDistance());
+  //DebugPrint("Distance reading (slow): ");
+  //DebugPrintln(distanceFilter.getFilteredDistance());
 
   return distanceFilter.getFilteredDistance() >= SLOW_DOWN_DISTANCE_READING;
 }
@@ -51,8 +63,9 @@ boolean needToStopByDistance() {
   // Update the distance filter
   distanceFilter.updateFilteredDistance(analogRead(DISTANCE_SENSOR_PIN));
 
-  DebugPrint("Distance reading (stop): ");
-  DebugPrintln(distanceFilter.getFilteredDistance());
+  //DebugPrint("Distance reading (stop): ");
+  //DebugPrintln(distanceFilter.getFilteredDistance());
 
   return distanceFilter.getFilteredDistance() >= STOPPING_DISTANCE_READING;
 }
+*/

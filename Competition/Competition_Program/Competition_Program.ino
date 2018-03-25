@@ -2,7 +2,7 @@
 
 #include <Servo.h>
 #include "QSerial.h"
-#include "Filter.h"
+//#include "Filter.h"
 
 // --------------------- PINS ---------------------
 
@@ -23,6 +23,9 @@
 // Distance Sensor
 #define DISTANCE_SENSOR_PIN   A0
 
+// Bumper
+#define BUMPER_PIN            A0
+
 // Light Sensors
 #define L_LIGHT_SENSOR_PIN    A3
 #define C_LIGHT_SENSOR_PIN    A5
@@ -36,6 +39,11 @@
 #define FORWARDS              1
 #define BACKWARDS             0
 
+// Turning
+#define _45_DEGREES           0
+#define _90_DEGREES           1
+#define _180_DEGREES          2
+
 // Arm positions
 #define ARM_LEFT_PAN          0
 #define ARM_CENTER_PAN        1
@@ -46,23 +54,29 @@
 #define ARM_LOWERED_TILT      2
 
 // Speeds
-#define DRIVE_SPEED                       255
-#define LINE_FOLLOW_SPEED                 100 // Need to TEST
-#define SLOW_DRIVE_SPEED                  60  // Need to TEST
-#define TURN_SPEED                        255 // Need to TEST
+#define DRIVE_SPEED                       200
+#define LINE_FOLLOW_SPEED                 150 // Need to TEST
+#define SLOW_DRIVE_SPEED                  100 // Need to TEST
+#define TURN_SPEED                        110 // Need to TEST
 
 // Timings
+#define _45_DEGREE_TURN_TIME              100 // Need to TEST
 #define _90_DEGREE_TURN_TIME              200 // Need to TEST
+#define _180_DEGREE_TURN_TIME             2000 // Need to TEST
+
 #define SHORT_DRIVE_TO_CENTER_TIME        1000// Need to TEST
 #define DRIVE_TO_HALF_CENTER_TIME         500 // Need to TEST
-#define DRIVE_IGNORING_LINE_FOLLOW_TIME   500 // Need to TEST
+#define BACKUP_FROM_DEPOSIT_TIME          200 // Need to TEST
+#define BACKUP_FROM_WALL_TIME             350 // Need to TEST
+#define SIDE_IGNORE_LINE_FOLLOW_TIME      250 // Need to TEST
+#define CENTER_IGNORE_LINE_FOLLOW_TIME    500 // Need to TEST
 
 // Arm Timings
-#define ARM_RAISE_WAIT_TIME               100 // Need to TEST
-#define ARM_IR_SENSE_WAIT_TIME            100 // Need to TEST
-#define ARM_LOWER_WAIT_TIME               100 // Need to TEST
-#define GRIP_OPEN_WAIT_TIME               50  // Need to TEST
-#define GRIP_CLOSE_WAIT_TIME              50  // Need to TEST
+#define ARM_RAISE_WAIT_TIME               500 // Need to TEST
+#define ARM_IR_SENSE_WAIT_TIME            1   // Need to TEST
+#define ARM_LOWER_WAIT_TIME               500 // Need to TEST
+#define GRIP_OPEN_WAIT_TIME               500 // Need to TEST
+#define GRIP_CLOSE_WAIT_TIME              500 // Need to TEST
 
 // IR Sensor timings
 #define IR_SENSOR_SCAN_TIMEOUT            200 // Need to TEST
@@ -73,14 +87,14 @@
 
 // Arm Angles
 #define GRIP_OPEN_ANGLE                   50
-#define GRIP_CLOSE_ANGLE                  220 // Need to TEST
+#define GRIP_CLOSE_ANGLE                  250 // Need to TEST
 #define ARM_RAISED_ANGLE                  155
 #define ARM_LOWERED_ANGLE                 91
 #define ARM_IR_SENSE_ANGLE                110 // Need to TEST
 
 // Distances
 #define SLOW_DOWN_DISTANCE_READING        300
-#define STOPPING_DISTANCE_READING         470
+#define STOPPING_DISTANCE_READING         350
 
 // Light threshold
 #define LINE_SENSOR_THRESHOLD             900
@@ -93,7 +107,7 @@
 // 0 = Find Ball, 1 = Collect Ball, 2 = Deposit Ball
 int state = 0; 
 
-// 0 = Right, 1 = Center, or 2 = Left
+// -1 = None, 0 = Right, 1 = Center, or 2 = Left
 int ballLoc = -1; 
 
 // 0 = Left, 1 = Right
@@ -112,13 +126,13 @@ QSerial IRSerial;
 
 //------------------------SMOOTHING-----------------------------------
 
-Filter distanceFilter;
+//Filter distanceFilter;
 
 // -------------------- SERIAL / DEBUGGING --------------------
 
 #define SERIAL_BAUD_RATE 115200
 
-#define SERIAL_DEBUG_ENABLED
+//#define SERIAL_DEBUG_ENABLED
 
 #ifdef SERIAL_DEBUG_ENABLED
 #define DebugPrint(...) Serial.print(__VA_ARGS__)
@@ -143,10 +157,11 @@ void setup() {
 
   //pinMode(R_BUMPER_PIN, INPUT);
   //pinMode(L_BUMPER_PIN, INPUT);
+  pinMode(BUMPER_PIN, INPUT);
 
   pinMode(IR_SENSOR_PIN, INPUT);
 
-  pinMode(DISTANCE_SENSOR_PIN, INPUT);
+  //pinMode(DISTANCE_SENSOR_PIN, INPUT);
 
   pinMode(L_LIGHT_SENSOR_PIN, INPUT);
   pinMode(C_LIGHT_SENSOR_PIN, INPUT);
@@ -158,7 +173,7 @@ void setup() {
   
   // ---------------------- DISTANCE SMOOTHING -----------------------
 
-  distanceFilter.setFilteredDistance((float)analogRead(DISTANCE_SENSOR_PIN));
+  //distanceFilter.setFilteredDistance((float)analogRead(DISTANCE_SENSOR_PIN));
   
   // --------------------- SERVOS ---------------------
 
@@ -177,10 +192,15 @@ void loop() {
   /*
     while (1) {
       delay(1000);
-      pivot(RIGHT, 90);
+      pivot(RIGHT, 180);
       delay(1000);
-      pivot(LEFT, 90);
-      delay(1000);
+      //delay(1000);
+      //pivot(RIGHT, _90_DEGREES);
+      //delay(1000);
+      //pivot(RIGHT, _45_DEGREES);
+      //delay(1000);
+      //pivot(RIGHT, _45_DEGREES);
+      //delay(1000);
     }
   */
 

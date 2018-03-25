@@ -2,7 +2,7 @@ void runFindBallLogic() {
 
   DebugPrintln("Finding ball...");
 
-  if (SIMULATED_BALL_LOCATION != 0) {
+  if (SIMULATED_BALL_LOCATION != -1) {
     ballLoc = SIMULATED_BALL_LOCATION;
     DebugPrint("Simulated ball location was: ");  DebugPrintln(ballLoc);
   }
@@ -29,7 +29,7 @@ void runFindBallLogic() {
     //}
 
     // If the ball it not forward or left, it it right
-    if (state == 0) {
+    if (ballLoc == -1) {
       ballLoc = 0;
     }
 
@@ -43,21 +43,22 @@ void runFindBallLogic() {
 
   }
 
-  delay(1000);
+  //delay(1000);
   DebugPrintln("Moving arm forward...");
   pivotArm(101);
 
-  delay(1000);
+  //delay(1000);
   DebugPrintln("Opening ball gripper...");
   // Open the ball gripper
   gripBall(false);
 
-  delay(1000);
+  //delay(1000);
   DebugPrintln("Raising arm...");
   tiltArm(ARM_RAISED_TILT);
 
-  delay(1000);
-  DebugPrintln("Done Find Ball Logic!");
+  //delay(1000);
+  DebugPrint("Done Find Ball Logic, ballLoc = ");
+  DebugPrintln(ballLoc);
   state = 1;
 
 }
@@ -91,6 +92,10 @@ void checkIRSignal() {
   currentIRValue = IRSerial.receive(IR_SENSOR_SCAN_TIMEOUT);
 
   if (currentIRValue >= 48 && currentIRValue <= 50) {
+
+    DebugPrint("Detected ball, IR value = ");
+    DebugPrintln(currentIRValue);
+    
     ballLoc = currentIRValue - 48;
     state = 1;
   }
