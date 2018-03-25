@@ -54,21 +54,21 @@
 #define ARM_LOWERED_TILT      2
 
 // Speeds
-#define DRIVE_SPEED                       200
+#define DRIVE_SPEED                       220
 #define LINE_FOLLOW_SPEED                 150 // Need to TEST
 #define SLOW_DRIVE_SPEED                  100 // Need to TEST
 #define TURN_SPEED                        110 // Need to TEST
 
 // Timings
-#define _45_DEGREE_TURN_TIME              100 // Need to TEST
-#define _90_DEGREE_TURN_TIME              200 // Need to TEST
-#define _180_DEGREE_TURN_TIME             2000 // Need to TEST
+#define _90_DEGREE_TURN_TIME              750 // Need to TEST
 
-#define SHORT_DRIVE_TO_CENTER_TIME        1000// Need to TEST
-#define DRIVE_TO_HALF_CENTER_TIME         500 // Need to TEST
+#define DRIVE_TO_HALF_CENTER_TIME         200 // Need to TEST
+#define DRIVE_TO_CENTER_ADJUST_TIME       200 // Need to TEST
 #define BACKUP_FROM_DEPOSIT_TIME          200 // Need to TEST
 #define BACKUP_FROM_WALL_TIME             350 // Need to TEST
-#define SIDE_IGNORE_LINE_FOLLOW_TIME      250 // Need to TEST
+#define _90_TURN_IGNORE_LINE_FOLLOW_TIME  400 // Need to TEST
+#define _180_TURN_IGNORE_LINE_FOLLOW_TIME 300 // Need to TEST
+#define SIDE_IGNORE_LINE_FOLLOW_TIME      200 // Need to TEST
 #define CENTER_IGNORE_LINE_FOLLOW_TIME    500 // Need to TEST
 
 // Arm Timings
@@ -83,7 +83,8 @@
 #define IR_SENSOR_ARM_MOVE_DWEL_TIME      410 // Need to TEST
 
 // Angles
-#define DIAGONAL_TURN_ANGLE               45 // Need to TEST
+#define DIAGONAL_1_TURN_ANGLE             60 // Need to TEST
+#define DIAGONAL_2_TURN_ANGLE             30 // Need to TEST
 
 // Arm Angles
 #define GRIP_OPEN_ANGLE                   50
@@ -102,7 +103,7 @@
 // --------------------- STATE DATA ---------------------
 
 // -1 = None, 0 = Right, 1 = Center, or 2 = Left
-#define SIMULATED_BALL_LOCATION 1
+#define SIMULATED_BALL_LOCATION 0
 
 // 0 = Find Ball, 1 = Collect Ball, 2 = Deposit Ball
 int state = 0; 
@@ -132,7 +133,7 @@ QSerial IRSerial;
 
 #define SERIAL_BAUD_RATE 115200
 
-//#define SERIAL_DEBUG_ENABLED
+#define SERIAL_DEBUG_ENABLED
 
 #ifdef SERIAL_DEBUG_ENABLED
 #define DebugPrint(...) Serial.print(__VA_ARGS__)

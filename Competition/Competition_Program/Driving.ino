@@ -84,11 +84,12 @@ void pivot(boolean rightDir) {
   else {
     DebugPrint("left ");
   }
-  DebugPrint("by: ");
-  DebugPrint(angle);
-  DebugPrint(" degrees. Waiting for: ");
-  DebugPrint(_90_DEGREE_TURN_TIME * (angle / 90.0));
-  DebugPrintln(" ms");
+  //DebugPrint("by: ");
+  //DebugPrint(angle);
+  //DebugPrint(" degrees. Waiting for: ");
+  //DebugPrint(_90_DEGREE_TURN_TIME * (angle / 90.0));
+  //DebugPrint(" ms");
+  DebugPrintln();
 
   // Set the left and right motor directions depending on pivot direction
   digitalWrite(L_MOTOR_DIR_PIN, rightDir ? HIGH : LOW);
@@ -108,6 +109,9 @@ void pivot(boolean rightDir, float angle) {
 
   pivot(rightDir);
 
+  DebugPrint("Waiting for: ");
+  DebugPrint(_90_DEGREE_TURN_TIME * (angle / 90.0));
+  DebugPrintln(" ms");
   // Delay for the needed amount of time (relative to 90° turn time)
   delay(_90_DEGREE_TURN_TIME * (angle / 90.0));
 

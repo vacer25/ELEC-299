@@ -6,13 +6,27 @@ void runCollectBallLogic() {
     //delay(1000);
     DebugPrintln("Pivoting 90 degrees right...");
     // Pivot right 90 degreese towards ball
-    pivot(RIGHT, 90);
+    pivot(RIGHT);
+    while (centerIsOverLine()) {
+      /* Wait for center to move off of the line */
+    }
+    delay(_90_TURN_IGNORE_LINE_FOLLOW_TIME);
+    while (!centerIsOverLine()) {
+      /* Wait for center to move on to the line */
+    }
   }
   else if (ballLoc == 2) {
     //delay(1000);
     DebugPrintln("Pivoting 90 degrees left...");
-    // Pivot left 90 degreese towards ball
-    pivot(LEFT, 90);
+    // Pivot left 90 degreece towards ball
+    pivot(LEFT);
+    while (centerIsOverLine()) {
+      /* Wait for center to move off of the line */
+    }
+    delay(_90_TURN_IGNORE_LINE_FOLLOW_TIME);
+    while (!centerIsOverLine()) {
+      /* Wait for center to move on to the line */
+    }
   }
 
   //delay(1000);
@@ -70,13 +84,12 @@ void driveForwardToBall() {
   }
   stopMotors();
 
+  // Small delay for the robot to come to a complete stop
   delay(100);
   DebugPrintln("Backing up from wall...");
   drive(BACKWARDS, SLOW_DRIVE_SPEED);
-
   // Wait for the robot to back up
   delay(BACKUP_FROM_WALL_TIME);
-
   // Stop the motors once backed up
   stopMotors();
 

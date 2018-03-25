@@ -1,39 +1,36 @@
 void runDepositBallLogic() {
 
-  //delay(1000);
-  DebugPrintln("Turning towards center...");
-  // Turn towards the center
-  pivot(RIGHT);
-  while (centerIsOverLine()) {
-    /* Wait for center to move off of the line */
-  }
-  delay(50);
-  while (!centerIsOverLine()) {
-    /* Wait for center to move on to the line */
-  }
-  stopMotors();
-
-  //delay(1000);
-
   // If the ball was not straigh ahead, need to do some turning
   if (ballLoc != 1) {
 
-    DebugPrintln("Driving towards center...");
-    // Drive forwards towards the center point
-    drive(FORWARDS, DRIVE_SPEED);
+    /*
+      DebugPrintln("Driving towards center...");
+      // Drive forwards towards the center point
+      drive(FORWARDS, DRIVE_SPEED);
 
-    // Delay for enough time to for the robot to get 1/2 way towards the center
-    delay(DRIVE_TO_HALF_CENTER_TIME);
+      // Delay for enough time to for the robot to get 1/2 way towards the center
+      delay(DRIVE_TO_HALF_CENTER_TIME);
+    */
+
+    // Back up from the wall
+    drive(BACKWARDS, SLOW_DRIVE_SPEED);
+    // Wait for the robot to back up
+    delay(BACKUP_FROM_WALL_TIME);
+    // Stop the motors once backed up
+    stopMotors();
 
     //delay(1000);
     DebugPrintln("Turning towards deposit point...");
     // Turn diagonally towards the deposit point
     if (ballLoc == 0) { // Ball was on the right of the deposit point
-      pivot(LEFT, DIAGONAL_TURN_ANGLE);
+      pivot(RIGHT, 90 + DIAGONAL_1_TURN_ANGLE);
     }
     else if (ballLoc == 2) { // Ball was on the left of the deposit point
-      pivot(RIGHT, DIAGONAL_TURN_ANGLE);
+      pivot(LEFT, 90 + DIAGONAL_1_TURN_ANGLE);
     }
+
+    // Small delay for the robot to come to a complete stop
+    //delay(200);
 
     //delay(1000);
     DebugPrintln("Driving towards deposit point while ignoring line following...");
@@ -49,20 +46,44 @@ void runDepositBallLogic() {
     }
 
   }
+  // If ball was straight ahead, need to do a 180
   else {
+
+    //delay(1000);
+    DebugPrintln("Turning towards center...");
+    // Turn towards the center
+    pivot(RIGHT);
+    while (centerIsOverLine()) {
+      /* Wait for center to move off of the line */
+    }
+    delay(50);
+    while (!centerIsOverLine()) {
+      /* Wait for center to move on to the line */
+    }
+    stopMotors();
+    //delay(1000);
+
     // If the ball was in the center location, the robot just crossed the center cross and needs to drive over it before following the line
     // Keep following the line while the robot is not over the center cross
     do {
       followLine(LINE_FOLLOW_SPEED);
     } while (!isFullyOverLine());
+
+    // Wait a little for the robot to drive past the center point
     delay(100);
 
   }
 
-  //delay(1000);
-  //DebugPrintln("Turning towards deposit point line (waiting to follow it)...");
-  // Drive forwards towards the deposit point
-  //drive(FORWARDS, DRIVE_SPEED);
+  if (ballLoc == 0) {
+    DebugPrintln("Pivoting 45 degrees left...");
+    // Pivot left towards deposit point
+    pivot(LEFT, DIAGONAL_2_TURN_ANGLE);
+  }
+  else if (ballLoc == 2) {
+    DebugPrintln("Pivoting 45 degrees right...");
+    // Pivot right towards deposit point
+    pivot(RIGHT, DIAGONAL_2_TURN_ANGLE);
+  }
 
   //delay(1000);
   DebugPrintln("Reached line, following it towards deposit point...");
@@ -95,7 +116,7 @@ void runDepositBallLogic() {
   DebugPrintln("Turning towards center...");
   // Turn towards the center
   pivot(RIGHT);
-  delay(200);
+  delay(_180_TURN_IGNORE_LINE_FOLLOW_TIME);
   while (!centerIsOverLine()) {
     /* Wait for center to move on to the line */
   }
@@ -112,6 +133,16 @@ void runDepositBallLogic() {
   do {
     followLine(LINE_FOLLOW_SPEED);
   } while (!isFullyOverLine());
+
+  DebugPrintln("Light sensors are over center, adjusting...");
+  // At this point the light sensorsa are over the center
+  stopMotors();
+
+  // Drive a little more forward so the center of the robot is over the center of the playfield
+  drive(FORWARDS, DRIVE_SPEED);
+
+  // Wait for the robot to be over the center of the playfield
+  delay(DRIVE_TO_CENTER_ADJUST_TIME);
 
   //delay(1000);
   DebugPrintln("Reached center, stopping...");
