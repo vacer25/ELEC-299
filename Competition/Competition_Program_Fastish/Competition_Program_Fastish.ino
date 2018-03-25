@@ -72,7 +72,7 @@
 #define _90_TURN_IGNORE_LINE_FOLLOW_TIME  400 // Need to TEST
 #define _180_TURN_IGNORE_LINE_FOLLOW_TIME 300 // Need to TEST
 #define SIDE_IGNORE_LINE_FOLLOW_TIME      200 // Need to TEST
-#define CENTER_IGNORE_DROP_BALL_TIME      500 // Need to TEST
+#define CENTER_IGNORE_DROP_BALL_TIME      1000 // Need to TEST
 
 // Arm Timings
 #define ARM_RAISE_WAIT_TIME               400 // Need to TEST

@@ -87,7 +87,7 @@ void runDepositBallLogic() {
   drive(BACKWARDS, DRIVE_SPEED);
 
   // Wait for the robot to back up
-  delay(BACKUP_FROM_DEPOSIT_TIME);
+  delay(200);
 
   // Stop the motors once backed up
   stopMotors();
