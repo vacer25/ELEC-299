@@ -13,6 +13,10 @@ void gripBall(boolean grip) {
 
 }
 
+void pivotArm(int pos) {
+  LRServo.write(pos);
+}
+
 void tiltArm(int positionIndex) {
   if (positionIndex == ARM_RAISED_TILT) {
     UDServo.write(ARM_RAISED_ANGLE);

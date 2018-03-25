@@ -149,12 +149,16 @@ void runDepositBallLogic() {
   // At this point the robot has reached the center, so stop it
   stopMotors();
 
+  // Reset the ball position
+  ballLoc = -1;
+
+  // Set the LED indicators to display no ball location
+  digitalWrite(INDICATOR_LED_1_PIN, LOW);
+  digitalWrite(INDICATOR_LED_2_PIN, LOW);
+
   //delay(1000);
   DebugPrintln("Done Deposit Ball Logic!");
   // Set state to 0 so robot can start the find ball code
   state = 0;
-
-  // Reset the ball position
-  ballLoc = -1;
 
 }

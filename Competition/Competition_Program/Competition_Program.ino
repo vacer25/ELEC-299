@@ -31,6 +31,10 @@
 #define C_LIGHT_SENSOR_PIN    A5
 #define R_LIGHT_SENSOR_PIN    A4
 
+// LED Indicators
+#define INDICATOR_LED_1_PIN   A1
+#define INDICATOR_LED_2_PIN   12
+
 // --------------------- CONSTANT DATA ---------------------
 
 // Directions
@@ -72,19 +76,19 @@
 #define CENTER_IGNORE_LINE_FOLLOW_TIME    500 // Need to TEST
 
 // Arm Timings
-#define ARM_RAISE_WAIT_TIME               500 // Need to TEST
+#define ARM_RAISE_WAIT_TIME               400 // Need to TEST
 #define ARM_IR_SENSE_WAIT_TIME            1   // Need to TEST
-#define ARM_LOWER_WAIT_TIME               500 // Need to TEST
-#define GRIP_OPEN_WAIT_TIME               500 // Need to TEST
-#define GRIP_CLOSE_WAIT_TIME              500 // Need to TEST
+#define ARM_LOWER_WAIT_TIME               400 // Need to TEST
+#define GRIP_OPEN_WAIT_TIME               400 // Need to TEST
+#define GRIP_CLOSE_WAIT_TIME              400 // Need to TEST
 
 // IR Sensor timings
 #define IR_SENSOR_SCAN_TIMEOUT            200 // Need to TEST
 #define IR_SENSOR_ARM_MOVE_DWEL_TIME      410 // Need to TEST
 
 // Angles
-#define DIAGONAL_1_TURN_ANGLE             60 // Need to TEST
-#define DIAGONAL_2_TURN_ANGLE             30 // Need to TEST
+#define DIAGONAL_1_TURN_ANGLE             65 // Need to TEST
+#define DIAGONAL_2_TURN_ANGLE             35 // Need to TEST
 
 // Arm Angles
 #define GRIP_OPEN_ANGLE                   50
@@ -94,16 +98,19 @@
 #define ARM_IR_SENSE_ANGLE                110 // Need to TEST
 
 // Distances
-#define SLOW_DOWN_DISTANCE_READING        300
-#define STOPPING_DISTANCE_READING         350
+//#define SLOW_DOWN_DISTANCE_READING        300
+//#define STOPPING_DISTANCE_READING         350
 
 // Light threshold
 #define LINE_SENSOR_THRESHOLD             900
 
 // --------------------- STATE DATA ---------------------
 
-// -1 = None, 0 = Right, 1 = Center, or 2 = Left
-#define SIMULATED_BALL_LOCATION 0
+// -1 = Don't use simulated ball location, 0 = Right, 1 = Center, or 2 = Left
+int simulatedBallLocation  = -1;
+
+// If this is defined (not commented), the simulated ball locaton will cycle as 0-> 1 -> 2 ->0...
+#define SIMULATED_BALL_LOCATION_INCREMENT
 
 // 0 = Find Ball, 1 = Collect Ball, 2 = Deposit Ball
 int state = 0; 
@@ -168,6 +175,14 @@ void setup() {
   pinMode(C_LIGHT_SENSOR_PIN, INPUT);
   pinMode(R_LIGHT_SENSOR_PIN, INPUT);
 
+  pinMode(INDICATOR_LED_1_PIN, OUTPUT);
+  pinMode(INDICATOR_LED_2_PIN, OUTPUT);
+
+  
+  // Set the LED indicators to display no ball location
+  digitalWrite(INDICATOR_LED_1_PIN, LOW);
+  digitalWrite(INDICATOR_LED_2_PIN, LOW);
+  
   // --------------------- IR SENSOR ---------------------
 
   IRSerial.attach(IR_SENSOR_PIN, -1);
@@ -189,34 +204,6 @@ void setup() {
 }
 
 void loop() {
-
-  /*
-    while (1) {
-      delay(1000);
-      pivot(RIGHT, 180);
-      delay(1000);
-      //delay(1000);
-      //pivot(RIGHT, _90_DEGREES);
-      //delay(1000);
-      //pivot(RIGHT, _45_DEGREES);
-      //delay(1000);
-      //pivot(RIGHT, _45_DEGREES);
-      //delay(1000);
-    }
-  */
-
-  /*
-  while (1) {
-    distanceFilter.updateFilteredDistance((float)analogRead(DISTANCE_SENSOR_PIN));
-
-    //DebugPrint("Distance reading (stop): ");
-    DebugPrint("0,1024,");
-    DebugPrint(analogRead(DISTANCE_SENSOR_PIN));
-    DebugPrint(",");
-    DebugPrintln(distanceFilter.getFilteredDistance());
-    delay(10);
-  }
-  */
 
   // ---------------------- FIND BALL -----------------------
 
@@ -243,38 +230,3 @@ void loop() {
   }
 
 }
-
-// --------------------- BUTTON ---------------------
-
-/*
-  // Waits for the right bumper switch to be pressed and released
-  // Called at end of setup() to stall program execution after initialization
-  void waitForButton() {
-
-  // Print debugging info if debugging is globally defined
-  DebugPrintln("Waiting for button...");
-
-  // Read the button status (Pressed == LOW, Released == HIGH)
-  bool buttonPressed = !digitalRead(R_BUMPER_PIN);
-
-  // Wait while the button is not pressed
-  while (!buttonPressed) {
-    // Delay for button debouncing
-    delay(10);
-    // Update the button status
-    buttonPressed = !digitalRead(R_BUMPER_PIN);
-  }
-
-  // When this loop is reached, the button was pressed
-  // Wait while the button is pressed
-  while (buttonPressed) {
-    // Delay for button debouncing
-    delay(10);
-    // Update the button status
-    buttonPressed = !digitalRead(R_BUMPER_PIN);
-  }
-
-  // Print debugging info if debugging is globally defined
-  DebugPrintln("Button waiting complete!");
-  }
-*/

@@ -2,8 +2,14 @@ void runFindBallLogic() {
 
   DebugPrintln("Finding ball...");
 
-  if (SIMULATED_BALL_LOCATION != -1) {
-    ballLoc = SIMULATED_BALL_LOCATION;
+  if (simulatedBallLocation != -1) {
+    ballLoc = simulatedBallLocation;
+#ifdef SIMULATED_BALL_LOCATION_INCREMENT
+    simulatedBallLocation++;
+    if (simulatedBallLocation > 2) {
+      simulatedBallLocation = 0;
+    }
+#endif
     DebugPrint("Simulated ball location was: ");  DebugPrintln(ballLoc);
   }
   else {
@@ -11,37 +17,37 @@ void runFindBallLogic() {
     // Set arm tilt to look at IR sensor
     tiltArm(ARM_IR_SENSE_TILT);
 
-    // While the ball is not found
-    //while (state == 0) {
+    // Keep scanning for the ball while it is not found
+    do {
 
-    // Look in range of 99-106
-    //if (armPos == ARM_CENTER_PAN) {
-    pivotArm(99, 104);
-    //armPos = ARM_LEFT_PAN;
-    //}
+      // Scan for ball in center
+      if (scanforBall(99, 104)) {
+        break;
+      }
 
-    // Look in range of 0-10
-    //else if (armPos == ARM_LEFT_PAN) {
-    if (state == 0) {
-      pivotArm(0, 10);
-    }
-    //armPos = ARM_RIGHT_PAN;
-    //}
+      // Scan for ball on left
+      if (scanforBall(0, 5)) {
+        break;
+      }
+
+      // Scan for ball on right
+      if (scanforBall(175, 180)) {
+        break;
+      }
+
+    } while (ballLoc == -1);
 
     // If the ball it not forward or left, it it right
-    if (ballLoc == -1) {
-      ballLoc = 0;
-    }
-
-    /*
-      // Look in range of 99-106
-      else if (armPos == ARM_RIGHT_PAN) {
-      pivotSearchArm(175, 180);
-      armPos = ARM_CENTER_PAN;
-      }
-    */
+    //if (ballLoc == -1) {
+    //  ballLoc = 0;
+    //}
 
   }
+  // At this point the ball has been found
+
+  // Set the LED indicators to display the current ball location
+  digitalWrite(INDICATOR_LED_1_PIN, (ballLoc == 0) || (ballLoc == 2));
+  digitalWrite(INDICATOR_LED_2_PIN, (ballLoc == 1) || (ballLoc == 2));
 
   //delay(1000);
   DebugPrintln("Moving arm forward...");
@@ -63,8 +69,9 @@ void runFindBallLogic() {
 
 }
 
-void pivotArm(int pos) {
-  LRServo.write(pos);
+boolean scanforBall(int startPos, int endPos) {
+  pivotArm(startPos, endPos);
+  return (ballLoc != -1);
 }
 
 void pivotArm(int startPos, int endPos) {
@@ -95,9 +102,8 @@ void checkIRSignal() {
 
     DebugPrint("Detected ball, IR value = ");
     DebugPrintln(currentIRValue);
-    
-    ballLoc = currentIRValue - 48;
-    state = 1;
+
+    ballLoc = currentIRValue - '0';
   }
 
 }
