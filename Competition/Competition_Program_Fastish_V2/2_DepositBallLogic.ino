@@ -13,7 +13,7 @@ void runDepositBallLogic() {
     DebugPrintln("Turning towards deposit point...");
     // Turn diagonally towards the deposit point
     if (ballLoc == 0) { // Ball was on the right of the deposit point
-      pivot(RIGHT, 90 + DIAGONAL_1_TURN_ANGLE);
+      pivot(RIGHT, 90 + DIAGONAL_2_TURN_ANGLE);
     }
     else if (ballLoc == 2) { // Ball was on the left of the deposit point
       pivot(LEFT, 90 + DIAGONAL_1_TURN_ANGLE);
@@ -95,7 +95,8 @@ void runDepositBallLogic() {
   DebugPrintln("Turning towards center...");
   // Turn towards the center
   pivot(RIGHT);
-  delay(_180_TURN_IGNORE_LINE_FOLLOW_TIME);
+delay(_180_TURN_IGNORE_LINE_FOLLOW_TIME);
+delay(500);
   while (!centerIsOverLine()) {
     /* Wait for center to move on to the line */
   }
@@ -105,7 +106,7 @@ void runDepositBallLogic() {
   // Lower the arm so that the IR scanning works when the robot returns to center
   tiltArm(ARM_IR_SENSE_ANGLE);
 
-  //delay(1000);
+  delay(100);
   DebugPrintln("Folloing line to center...");
   // Start following the middle line until all 3 light sensors are over the center line
   do {
@@ -115,7 +116,7 @@ void runDepositBallLogic() {
   DebugPrintln("Light sensors are over center, adjusting...");
   // At this point the light sensorsa are over the center
   stopMotors();
-  delay(300);
+  delay(200);
   // Drive a little more forward so the center of the robot is over the center of the playfield
   drive(BACKWARDS, DRIVE_SPEED);
 
