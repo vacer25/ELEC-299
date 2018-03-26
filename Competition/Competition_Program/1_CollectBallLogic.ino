@@ -79,21 +79,28 @@ void driveForwardToBall() {
 
   */
 
+  // If the robot is fully not over the line, the line following will not work
+  while (isFullyNotOverLine()) {
+    // Drive forward until one if the sensors are over the line
+    drive(FORWARDS, SLOW_DRIVE_SPEED);
+  }
+  stopMotors();
+
   // while the bumper switch is not hit
   while (digitalRead(BUMPER_PIN) != LOW) {
     // Keep following the line
     followLine(LINE_FOLLOW_SPEED);
   }
-  
+
   // At this point the robot has hit the wall, stop the motors
   stopMotors();
 
   // Small delay for the robot to come to a complete stop
   delay(100);
-  
+
   DebugPrintln("Backing up from wall...");
   drive(BACKWARDS, SLOW_DRIVE_SPEED);
-  
+
   // Wait for the robot to back up
   delay(BACKUP_FROM_WALL_TIME);
   // Stop the motors once backed up

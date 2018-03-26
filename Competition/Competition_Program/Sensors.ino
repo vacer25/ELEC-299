@@ -33,6 +33,19 @@ boolean isFullyOverLine() {
 
 }
 
+// Return true when all 3 light sensors are not over a line
+boolean isFullyNotOverLine() {
+
+  // Get the sensor readings
+  int leftSensorValue = analogRead(L_LIGHT_SENSOR_PIN);
+  int centerSensorValue = analogRead(C_LIGHT_SENSOR_PIN);
+  int rightSensorValue = analogRead(R_LIGHT_SENSOR_PIN);
+
+  // Return true when  all 3 light sensors reading are >= the threshold
+  return leftSensorValue < LINE_SENSOR_THRESHOLD && centerSensorValue < LINE_SENSOR_THRESHOLD && rightSensorValue < LINE_SENSOR_THRESHOLD;
+
+}
+
 // Return true when the center light sensors is over a line
 boolean centerIsOverLine() {
 
