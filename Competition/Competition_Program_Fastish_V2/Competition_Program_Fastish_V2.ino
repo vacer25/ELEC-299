@@ -59,20 +59,20 @@
 
 // Speeds
 #define DRIVE_SPEED                       255
-#define LINE_FOLLOW_SPEED                 250 // Need to TEST
-#define SLOW_DRIVE_SPEED                  200 // Need to TEST
+#define LINE_FOLLOW_SPEED                 255 // Need to TEST
+#define SLOW_DRIVE_SPEED                  175 // Need to TEST
 #define TURN_SPEED                        110 // Need to TEST
 
 // Timings
-#define _90_DEGREE_TURN_TIME              600 // Need to TEST
+#define _90_DEGREE_TURN_TIME              750 // Need to TEST
 
-#define DRIVE_TO_CENTER_ADJUST_TIME       172 // Need to TEST
-#define BACKUP_FROM_DEPOSIT_TIME          100 // Need to TEST
-#define BACKUP_FROM_WALL_TIME             175 // Need to TEST
+#define DRIVE_TO_CENTER_ADJUST_TIME       200 // Need to TEST
+#define BACKUP_FROM_DEPOSIT_TIME          200 // Need to TEST
+#define BACKUP_FROM_WALL_TIME             180 // Need to TEST
 #define _90_TURN_IGNORE_LINE_FOLLOW_TIME  400 // Need to TEST
 #define _180_TURN_IGNORE_LINE_FOLLOW_TIME 300 // Need to TEST
 #define SIDE_IGNORE_LINE_FOLLOW_TIME      200 // Need to TEST
-#define CENTER_IGNORE_DROP_BALL_TIME      1000 // Need to TEST
+#define CENTER_IGNORE_DROP_BALL_TIME      100 // Need to TEST
 
 // Arm Timings
 #define ARM_RAISE_WAIT_TIME               400 // Need to TEST
@@ -86,8 +86,8 @@
 #define IR_SENSOR_ARM_MOVE_DWEL_TIME      200 // Need to TEST
 
 // Angles
-#define DIAGONAL_1_TURN_ANGLE             65 // Need to TEST
-#define DIAGONAL_2_TURN_ANGLE             35 // Need to TEST
+#define DIAGONAL_1_TURN_ANGLE             50 // Need to TEST//65-55
+#define DIAGONAL_2_TURN_ANGLE             45 // Need to TEST//35-45
 
 // Arm Angles
 #define GRIP_OPEN_ANGLE                   50
