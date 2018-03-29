@@ -20,6 +20,10 @@ void drive(boolean forwards, int currentSpeed) {
 // --------------------- LINE FOLLOWING ---------------------
 
 void followLine(int currentSpeed) {
+  followLine(currentSpeed, false);
+}
+
+void followLine(int currentSpeed, boolean aggressive) {
 
   // Get the sensor readings
   int leftSensorValue = analogRead(L_LIGHT_SENSOR_PIN);
@@ -34,13 +38,13 @@ void followLine(int currentSpeed) {
 
   // If the right sensor is over the line, turn right
   if (leftSensorValue < LINE_SENSOR_THRESHOLD && rightSensorValue >= LINE_SENSOR_THRESHOLD) {
-    turn(RIGHT, currentSpeed);
+    turn(RIGHT, currentSpeed, aggressive);
     //DebugPrintln("R");
   }
 
   // If the left sensor is over the line, turn left
   else if (leftSensorValue >= LINE_SENSOR_THRESHOLD && rightSensorValue < LINE_SENSOR_THRESHOLD) {
-    turn(LEFT, currentSpeed);
+    turn(LEFT, currentSpeed, aggressive);
     //DebugPrintln("L");
   }
 
@@ -50,7 +54,7 @@ void followLine(int currentSpeed) {
 
 // Turn by stopping 1 motor
 // rightDir: true to pivot right, false to pivot left
-void turn(boolean rightDir, int currentSpeed) {
+void turn(boolean rightDir, int currentSpeed, boolean aggressive) {
 
   // Set the motors to go forward
   digitalWrite(L_MOTOR_DIR_PIN, HIGH);
@@ -58,14 +62,14 @@ void turn(boolean rightDir, int currentSpeed) {
 
   // If turning right, turn the left motor on and right motor off
   if (rightDir) {
-    analogWrite(R_MOTOR_SPD_PIN, currentSpeed / 2);
+    analogWrite(R_MOTOR_SPD_PIN, aggressive ? (currentSpeed / 4) : (currentSpeed / 2));
     analogWrite(L_MOTOR_SPD_PIN, currentSpeed);
   }
 
   // If turning left, turn the left motor off and right motor on
   else {
     analogWrite(R_MOTOR_SPD_PIN, currentSpeed);
-    analogWrite(L_MOTOR_SPD_PIN, currentSpeed / 2);
+    analogWrite(L_MOTOR_SPD_PIN, aggressive ? (currentSpeed / 4) : (currentSpeed / 2));
   }
 
 }

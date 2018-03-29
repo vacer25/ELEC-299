@@ -13,7 +13,7 @@ void runDepositBallLogic() {
     DebugPrintln("Turning towards deposit point...");
     // Turn diagonally towards the deposit point
     if (ballLoc == 0) { // Ball was on the right of the deposit point
-      pivot(RIGHT, 90 + DIAGONAL_2_TURN_ANGLE);
+      pivot(RIGHT, 90 + DIAGONAL_1_TURN_ANGLE);
     }
     else if (ballLoc == 2) { // Ball was on the left of the deposit point
       pivot(LEFT, 90 + DIAGONAL_1_TURN_ANGLE);
@@ -96,7 +96,7 @@ void runDepositBallLogic() {
   // Turn towards the center
   pivot(RIGHT);
 delay(_180_TURN_IGNORE_LINE_FOLLOW_TIME);
-delay(500);
+delay(100);
   while (!centerIsOverLine()) {
     /* Wait for center to move on to the line */
   }

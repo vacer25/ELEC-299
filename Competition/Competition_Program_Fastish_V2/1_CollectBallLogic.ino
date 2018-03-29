@@ -79,6 +79,13 @@ void driveForwardToBall() {
 
   */
 
+    // If the robot is fully not over the line, the line following will not work
+  while (isFullyNotOverLine()) {
+    // Drive forward until one if the sensors are over the line
+    drive(FORWARDS, SLOW_DRIVE_SPEED);
+  }
+  stopMotors();
+
   // while the bumper switch is not hit
   while (digitalRead(BUMPER_PIN) != LOW) {
     // Keep following the line
