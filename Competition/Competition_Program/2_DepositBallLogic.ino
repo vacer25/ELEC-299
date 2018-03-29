@@ -72,7 +72,7 @@ void runDepositBallLogic() {
   DebugPrintln("Reached line, following it towards deposit point...");
   // Start following the middle line until all 3 light sensors are over the deposit line
   do {
-    followLine(LINE_FOLLOW_SPEED);
+    followLine(LINE_FOLLOW_SPEED, true);
   } while (!isFullyOverLine());
 
   DebugPrintln("Reached deposit point...");

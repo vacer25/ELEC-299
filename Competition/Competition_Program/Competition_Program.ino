@@ -86,7 +86,7 @@
 #define IR_SENSOR_ARM_MOVE_DWEL_TIME      200 // Need to TEST
 
 // Angles
-#define DIAGONAL_1_TURN_ANGLE             65 // Need to TEST
+#define DIAGONAL_1_TURN_ANGLE             63 // Need to TEST
 #define DIAGONAL_2_TURN_ANGLE             35 // Need to TEST
 
 // Arm Angles
@@ -106,7 +106,7 @@
 // --------------------- STATE DATA ---------------------
 
 // -1 = Don't use simulated ball location, 0 = Right, 1 = Center, or 2 = Left
-int simulatedBallLocation  = 0;
+int simulatedBallLocation  = -1;
 
 // If this is defined (not commented), the simulated ball locaton will cycle as 0-> 1 -> 2 ->0...
 #define SIMULATED_BALL_LOCATION_INCREMENT
