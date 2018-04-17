@@ -13,7 +13,7 @@ void runDepositBallLogic() {
     DebugPrintln("Turning towards deposit point...");
     // Turn diagonally towards the deposit point
     if (ballLoc == 0) { // Ball was on the right of the deposit point
-      pivot(RIGHT, 90 + DIAGONAL_1_TURN_ANGLE);
+      pivot(RIGHT, 90 + DIAGONAL_1_TURN_ANGLE + 5);
     }
     else if (ballLoc == 2) { // Ball was on the left of the deposit point
       pivot(LEFT, 90 + DIAGONAL_1_TURN_ANGLE);
@@ -21,7 +21,7 @@ void runDepositBallLogic() {
 
     DebugPrintln("Driving towards deposit point while ignoring line following...");
     // Drive forwards towards the deposit point
-    drive(FORWARDS, DRIVE_SPEED);
+    drive(FORWARDS, FAST_DRIVE_SPEED);
 
     // Delay for enough time to for the robot to get past the right or left line so it does not try to follow them
     delay(SIDE_IGNORE_LINE_FOLLOW_TIME);
@@ -50,7 +50,7 @@ void runDepositBallLogic() {
     // If the ball was in the center location, the robot just crossed the center cross and needs to drive over it before following the line
     // Keep following the line while the robot is not over the center cross
     do {
-      followLine(LINE_FOLLOW_SPEED);
+      followLine(FAST_DRIVE_SPEED);
     } while (!isFullyOverLine());
 
     // Wait a little for the robot to drive past the center point
@@ -72,7 +72,7 @@ void runDepositBallLogic() {
   DebugPrintln("Reached line, following it towards deposit point...");
   // Start following the middle line until all 3 light sensors are over the deposit line
   do {
-    followLine(LINE_FOLLOW_SPEED);
+    followLine(DRIVE_SPEED, (ballLoc != 1) ? true : false);
   } while (!isFullyOverLine());
 
   DebugPrintln("Reached deposit point...");
@@ -84,7 +84,7 @@ void runDepositBallLogic() {
   gripBall(false);
 
   DebugPrintln("Backing up from deposit point...");
-  drive(BACKWARDS, DRIVE_SPEED);
+  drive(BACKWARDS, FAST_DRIVE_SPEED);
 
   // Wait for the robot to back up
   delay(BACKUP_FROM_DEPOSIT_TIME);
@@ -103,40 +103,66 @@ void runDepositBallLogic() {
 
   DebugPrintln("Lowering arm...");
   // Lower the arm so that the IR scanning works when the robot returns to center
-  tiltArm(ARM_IR_SENSE_ANGLE);
+  tiltArm(ARM_IR_SENSE_TILT);
 
+  // REMOVE
   //delay(1000);
+
+  boolean ballLoationWasDetectedInCenter = false;
+
   DebugPrintln("Folloing line to center...");
   // Start following the middle line until all 3 light sensors are over the center line
   do {
     followLine(LINE_FOLLOW_SPEED);
+    // Keep scanning for the ball while the robot is driving back to the center
+    if (!ballLoationWasDetectedInCenter) {
+      ballLoationWasDetectedInCenter = checkIRSignal();
+    }
   } while (!isFullyOverLine());
 
-  DebugPrintln("Light sensors are over center, adjusting...");
-  // At this point the light sensorsa are over the center
-  stopMotors();
-  delay(300);
-  // Drive a little more forward so the center of the robot is over the center of the playfield
-  drive(BACKWARDS, DRIVE_SPEED);
+  // If the ball was not found to be in the center, adjust back to the center and prepare to scan
+  if (!ballLoationWasDetectedInCenter) {
 
-  // Wait for the robot to be over the center of the playfield
-  delay(50);
+    ///*
+    DebugPrintln("Light sensors are over center, adjusting...");
+    // At this point the light sensorsa are over the center
+    stopMotors();
 
-  //delay(1000);
-  DebugPrintln("Reached center, stopping...");
-  // At this point the robot has reached the center, so stop it
-  stopMotors();
+    // Drive a little more forward so the center of the robot is over the center of the playfield
+    drive(FORWARDS, SLOW_DRIVE_SPEED);
 
-  // Reset the ball position
-  ballLoc = -1;
+    // Wait for the robot to be over the center of the playfield
+    delay(DRIVE_TO_CENTER_ADJUST_TIME);
+    //*/
 
-  // Set the LED indicators to display no ball location
-  digitalWrite(INDICATOR_LED_1_PIN, LOW);
-  digitalWrite(INDICATOR_LED_2_PIN, LOW);
+    DebugPrintln("Reached center, stopping...");
+    // At this point the robot has reached the center, so stop it
+    stopMotors();
 
-  //delay(1000);
-  DebugPrintln("Done Deposit Ball Logic!");
-  // Set state to 0 so robot can start the find ball code
-  state = 0;
+    // Reset the ball position
+    ballLoc = -1;
+
+    // Set the LED indicators to display no ball location
+    digitalWrite(INDICATOR_LED_1_PIN, LOW);
+    digitalWrite(INDICATOR_LED_2_PIN, LOW);
+
+    //delay(1000);
+    DebugPrintln("Done Deposit Ball Logic!");
+    // Set state to 0 so robot can start the find ball code
+    state = 0;
+
+  }
+  // If the ball was found in the center, skip the scanning stage and go straight to collecting it
+  else {
+    // Ball is in the center
+    ballLoc = 1;
+
+    DebugPrintln("Raising arm...");
+    tiltArm(ARM_RAISED_TILT);
+
+    DebugPrintln("Done Deposit Ball Logic (Ball was found straight ahead)!");
+    // State is now to collect the center ball (1)
+    state = 1;
+  }
 
 }

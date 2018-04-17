@@ -59,41 +59,28 @@ void runCollectBallLogic() {
 
 void driveForwardToBall() {
 
-  /*
-    // Follow the line leading to the ball until reaching slow down distance
-    while (!needToSlowDownByDistance()) {
-    followLine(LINE_FOLLOW_SPEED);
-    }
-
-    delay(1000);
-    DebugPrintln("Reached the slow driving threshold, will follow line slowly...");
-    // Follow the line leading to the ball at at slower speed until reaching stopping distance
-    while (!needToStopByDistance()) {
-    followLine(SLOW_DRIVE_SPEED);
-    }
-
-    delay(1000);
-    DebugPrintln("Reached the stop threshold, stopping motors...");
-    // Stop the robot under the assumption its right in front of the ball
-    stopMotors();
-
-  */
+  // If the robot is fully not over the line, the line following will not work
+  while (isFullyNotOverLine()) {
+    // Drive forward until one if the sensors are over the line
+    drive(FORWARDS, SLOW_DRIVE_SPEED);
+  }
+  stopMotors();
 
   // while the bumper switch is not hit
   while (digitalRead(BUMPER_PIN) != LOW) {
     // Keep following the line
     followLine(LINE_FOLLOW_SPEED);
   }
-  
+
   // At this point the robot has hit the wall, stop the motors
   stopMotors();
 
   // Small delay for the robot to come to a complete stop
   delay(100);
-  
+
   DebugPrintln("Backing up from wall...");
   drive(BACKWARDS, SLOW_DRIVE_SPEED);
-  
+
   // Wait for the robot to back up
   delay(BACKUP_FROM_WALL_TIME);
   // Stop the motors once backed up

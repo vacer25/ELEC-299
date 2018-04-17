@@ -1,5 +1,19 @@
 // --------------------- ARM MOVEMENT ---------------------
 
+void setArmToCollectBallState() {
+
+  DebugPrintln("Moving arm forward...");
+  pivotArm(101);
+
+  DebugPrintln("Opening ball gripper...");
+  // Open the ball gripper
+  gripBall(false);
+
+  DebugPrintln("Raising arm...");
+  tiltArm(ARM_RAISED_TILT);
+
+}
+
 void gripBall(boolean grip) {
 
   if (grip) {
@@ -22,11 +36,11 @@ void tiltArm(int positionIndex) {
     UDServo.write(ARM_RAISED_ANGLE);
     delay(ARM_RAISE_WAIT_TIME);
   }
-  else if (positionIndex == ARM_LOWERED_TILT) {
+  if (positionIndex == ARM_LOWERED_TILT) {
     UDServo.write(ARM_LOWERED_ANGLE);
     delay(ARM_LOWER_WAIT_TIME);
   }
-  else if (positionIndex == ARM_IR_SENSE_TILT) {
+  if (positionIndex == ARM_IR_SENSE_TILT) {
     UDServo.write(ARM_IR_SENSE_ANGLE);
     delay(ARM_IR_SENSE_WAIT_TIME);
   }

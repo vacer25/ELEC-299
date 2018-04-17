@@ -58,35 +58,36 @@
 #define ARM_LOWERED_TILT      2
 
 // Speeds
-#define DRIVE_SPEED                       255
-#define LINE_FOLLOW_SPEED                 250 // Need to TEST
-#define SLOW_DRIVE_SPEED                  200 // Need to TEST
+#define FAST_DRIVE_SPEED                  255
+#define DRIVE_SPEED                       220
+#define LINE_FOLLOW_SPEED                 180 // Need to TEST
+#define SLOW_DRIVE_SPEED                  100 // Need to TEST
 #define TURN_SPEED                        110 // Need to TEST
 
 // Timings
-#define _90_DEGREE_TURN_TIME              600 // Need to TEST
+#define _90_DEGREE_TURN_TIME              750 // Need to TEST
 
-#define DRIVE_TO_CENTER_ADJUST_TIME       172 // Need to TEST
-#define BACKUP_FROM_DEPOSIT_TIME          100 // Need to TEST
-#define BACKUP_FROM_WALL_TIME             175 // Need to TEST
-#define _90_TURN_IGNORE_LINE_FOLLOW_TIME  400 // Need to TEST
+#define DRIVE_TO_CENTER_ADJUST_TIME       200 // Need to TEST
+#define BACKUP_FROM_DEPOSIT_TIME          200 // Need to TEST
+#define BACKUP_FROM_WALL_TIME             350 // Need to TEST
+#define _90_TURN_IGNORE_LINE_FOLLOW_TIME  500 // Need to TEST
 #define _180_TURN_IGNORE_LINE_FOLLOW_TIME 300 // Need to TEST
 #define SIDE_IGNORE_LINE_FOLLOW_TIME      200 // Need to TEST
-#define CENTER_IGNORE_DROP_BALL_TIME      1000 // Need to TEST
+#define CENTER_IGNORE_DROP_BALL_TIME      100 // Need to TEST
 
 // Arm Timings
-#define ARM_RAISE_WAIT_TIME               400 // Need to TEST
+#define ARM_RAISE_WAIT_TIME               350 // Need to TEST
 #define ARM_IR_SENSE_WAIT_TIME            1   // Need to TEST
-#define ARM_LOWER_WAIT_TIME               400 // Need to TEST
+#define ARM_LOWER_WAIT_TIME               350 // Need to TEST
 #define GRIP_OPEN_WAIT_TIME               400 // Need to TEST
-#define GRIP_CLOSE_WAIT_TIME              400 // Need to TEST
+#define GRIP_CLOSE_WAIT_TIME              300 // Need to TEST
 
 // IR Sensor timings
 #define IR_SENSOR_SCAN_TIMEOUT            200 // Need to TEST
 #define IR_SENSOR_ARM_MOVE_DWEL_TIME      200 // Need to TEST
 
 // Angles
-#define DIAGONAL_1_TURN_ANGLE             65 // Need to TEST
+#define DIAGONAL_1_TURN_ANGLE             63 // Need to TEST
 #define DIAGONAL_2_TURN_ANGLE             35 // Need to TEST
 
 // Arm Angles
@@ -123,6 +124,9 @@ int armPos = ARM_CENTER_PAN;
 // -1, -2 = Error / no signal, 48, 49, 50 == Valid ball location data
 int currentIRValue;
 
+// The first time the ball is scanned
+boolean isFirstScan = true;
+
 // --------------------- SERVO OBJECTS ---------------------
 
 Servo LRServo, UDServo, gripServo;
@@ -139,7 +143,7 @@ QSerial IRSerial;
 
 #define SERIAL_BAUD_RATE 115200
 
-#define SERIAL_DEBUG_ENABLED
+//#define SERIAL_DEBUG_ENABLED
 
 #ifdef SERIAL_DEBUG_ENABLED
 #define DebugPrint(...) Serial.print(__VA_ARGS__)
@@ -214,7 +218,7 @@ void loop() {
 
   // ---------------------- COLLECT BALL -----------------------
 
-  else if (state == 1) { // Collect Ball
+  if (state == 1) { // Collect Ball
     // Assumes that the robot has found the ball with the ball location indicated by the ballLoc variable,
     // the robot arm is lowered in the forward direction
     runCollectBallLogic();
@@ -222,7 +226,7 @@ void loop() {
 
   // ---------------------- DEPOSIT BALL -----------------------
 
-  else if (state == 2) { // Deposit Ball
+  if (state == 2) { // Deposit Ball
     // Assumes that the robot has the ball in the gripper and is at the ball location indicated by the ballLoc variable,
     // the robot arm is raised in the forward direction
     runDepositBallLogic();

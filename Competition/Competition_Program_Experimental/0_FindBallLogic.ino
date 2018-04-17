@@ -20,11 +20,14 @@ void runFindBallLogic() {
     // Keep scanning for the ball while it is not found
     do {
 
-      // Scan for ball in center
-      if (scanforBall(99, 104)) {
-        break;
+      if (isFirstScan) {
+        // Scan for ball in center
+        if (scanforBall(99, 104)) {
+          break;
+        }
+        isFirstScan = false;
       }
-      
+
       // Scan for ball on right
       if (scanforBall(175, 180)) {
         break;
@@ -33,6 +36,13 @@ void runFindBallLogic() {
       // Scan for ball on left
       if (scanforBall(0, 5)) {
         break;
+      }
+
+      if (!isFirstScan) {
+        // Scan for ball in center
+        if (scanforBall(99, 104)) {
+          break;
+        }
       }
 
     } while (ballLoc == -1);
@@ -49,18 +59,8 @@ void runFindBallLogic() {
   digitalWrite(INDICATOR_LED_1_PIN, (ballLoc == 0) || (ballLoc == 2));
   digitalWrite(INDICATOR_LED_2_PIN, (ballLoc == 1) || (ballLoc == 2));
 
-  //delay(1000);
-  DebugPrintln("Moving arm forward...");
-  pivotArm(101);
-
-  //delay(1000);
-  DebugPrintln("Opening ball gripper...");
-  // Open the ball gripper
-  gripBall(false);
-
-  //delay(1000);
-  DebugPrintln("Raising arm...");
-  tiltArm(ARM_RAISED_TILT);
+  // Prepare the arm
+  setArmToCollectBallState();
 
   //delay(1000);
   DebugPrint("Done Find Ball Logic, ballLoc = ");
@@ -99,7 +99,7 @@ void pivotArm(int startPos, int endPos) {
       if (ballLoc != -1) {
         break;
       }
-      
+
       currentMillis = millis();
     }
 
@@ -107,7 +107,7 @@ void pivotArm(int startPos, int endPos) {
 
 }
 
-void checkIRSignal() {
+boolean checkIRSignal() {
 
   // Read the IR signal
   currentIRValue = IRSerial.receive(IR_SENSOR_SCAN_TIMEOUT);
@@ -120,6 +120,12 @@ void checkIRSignal() {
 
     // Convert it to the numeric value
     ballLoc = currentIRValue - '0';
+
+    // Indicate that the ball was detected
+    return true;
   }
+
+  // Indicate that the ball was NOT detected
+  return false;
 
 }
